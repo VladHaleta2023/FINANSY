@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <title>Karta podatkowa i Ryczałt</title>
+</head>
+<style>
+    td, th {
+        border: 1px solid black;
+    }
+
+    th {
+        text-align: center;
+    }
+
+    td {
+        color: black;
+        text-align: left;
+        font-size: 20px;
+    }
+
+    div {
+        overflow: -moz-scrollbars-none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+</style>
+<script src="data.js"></script>
+<body onload="showTable()">
+    <header>
+        <div class="listHeader">
+            <a class="elList" href="">Obliczenia mając 1 przychód</a>
+            <a class="elList" href="">Obliczenia procentowe</a>
+        </div>
+    </header>
+    <main>
+        <div style="font-size: 20px; font-style: normal; color: #04AA6D;">Te wszystkie informacji będą się zmieniać co roku</span>
+        <br>
+        <br>
+        <div style="color: white; font-size: 24px; font-style: normal;">
+            <span style="font-weight: bold;">Ryczałt od przychodów ewidencjonowanych</span> podstawę stanowi <span style="font-weight: bold;">osiągnięty przychód</span>
+            po uwzględnieniu przysługujących odliczeń. W rozliczeniu podatkowym <span>nie uwzględnia się kosztów uzyskania przychodów</span>,
+            dlatego ryczałt jest opłacalny dla przedsiębiorców.<br>
+            Warunek jest taki, że ich przychody w poprzednim roku podatkowym <span style="font-weight: bold;">nie przekroczyły limitu 2 mln euro</span><br>
+            <br>W przypadku uzyskania przychodów nie można:<br>
+            1. Rozliczyć się <span style="font-weight: bold;">wspólnie z małżonkiem albo jako samotny rodzic</span><br>
+            2. Odliczyć od ryczałtu <span style="font-weight: bold;">ulgi na dziecko</span><br><br>
+            Osiągnięty przychód <span style="font-weight: bold;">należy pomniejszyć</span> o:<br>
+            1. Zapłacone <span style="font-weight: bold;">składki na ubezpieczenie społeczne</span><br>
+            2. <span style="font-weight: bold;">50% składki na ubezpieczenie zdrowotne</span>
+            3. Straty podatkowe z lat ubiegłych
+        </div>
+        <br>
+        <div style="color: white; font-size: 24px; font-style: normal;">
+            <span style="font-weight: bold;">Z ryczałtu nie mogąkorzystać:</span><br>
+            - opłacają w tym samym roku podatek w formie karty podatkowej<br>
+            - korzystają z okresowego zwolnienia od podatku dochodowego<br>
+            - osiągają całości bądz części przychody z prowadzenia apteki, kantorów, czy handlu częściami i akcesoriami do pojazdów mechanicznych<br>
+            - wytwarzają wyroby opodatkowane podatkiem akcyzowym - z wyjątkiem wytwarzania energii elektrycznej z odnawialnych zródeł energii
+        </div>
+        <br>
+        <div style="color: white; font-size: 24px; font-style: normal;">
+            W uproszczonej formie księgowości, ujmuje się wyłącznie <span style="font-weight: bold;">przychody z działalności gospodarczej.</span>
+            Ewidencja przychodów jest prowadzona w formie papierowej lub elektronicznej.
+        </div>
+        <br>
+        <div style="color: white; font-size: 24px; font-style: normal;">
+            Podatnicy, którzy dokonują rozliczeń w formie ryczałtu od przychodów ewidencjonowanych, mają obowiązek sporządzenia zeznania
+            za rok poprzedni <span style="font-weight: bold;">w terminie 15 lutego do końca kwietnia następnego roku</span> na formularzu PIT-28/28S
+        </div>
+        <br>
+        <br>
+        <div style="overflow-x: scroll; width: 100%">
+            <div style="border: 1px solid black; font-size: 24px; max-width: 1000px; width: 100%; color: white; font-style: normal;">
+                <div style="text-align: center; background-color: grey; color: black; font-weight: bold;">
+                    Schemat obliczenia należnego ryczłtu od przychodów ewidencjonowanych:
+                </div>
+                <div style="text-align: left; background-color: white; color: black; padding: 8px 16px;">
+                    <span style="padding-left: 24px;">prychody</span><br>
+                    <span>- &nbsp;odliczenia od przychodów w tym:</span><br>
+                    <span style="padding-left: 24px;">1. zapłacone składki na ubezpiecznia społeczne</span><br>
+                    <span style="padding-left: 24px;">2. 50% zapłaconej składki na ubezpieczenie zdrowotne</span><br>
+                    <span style="padding-left: 24px;">3. strata z lat ubiegłych</span><br>
+                    <span>= &nbsp;podstawa opodatkowania, po zaokrągleniu do pełnych złotych</span><br>
+                    <span style="padding-left: 24px;">podstawa opodatkowania x stawka podatkowa</span><br>
+                    <span>= &nbsp;kwota ryczałtu od przychodów ewidencjonowanych, po zaokrągleniu do pełnych złotych</span>
+                </div>
+            </div>
+            <br>
+            <table style="width: 1000px; font-size: 24px;">
+                <tr>
+                    <th style="width: 100px; text-align: center;">Stawka podatku</th>
+                    <th style="width: 900px; text-align: center;">Przykłady przychodów opodatkowanych ryczałtem</th>
+                </tr>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+    </main>
+</body>
+<script>
+    function showTable() {
+        try {
+            for (let i = 0; i < tableRyczStawki.length; i++) {
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
+                `<tr>
+                    <td rowspan="${tableRycz[i].length}">${tableRyczStawki[i]}%</td>
+                    <td>${tableRycz[i][0]}</td>    
+                </tr>`;
+
+                for (let j = 1; j < tableRycz[i].length; j++) {
+                    document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
+                    `<tr>
+                        <td>${tableRycz[i][j]}</td>    
+                    </tr>`;
+                }
+            }
+        }
+        catch {
+
+        }
+    }
+</script>
+</html>
