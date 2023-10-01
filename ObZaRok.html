@@ -5,19 +5,590 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <title>Karta podatkowa i Ryczałt</title>
 </head>
-<body>
+<script src="data.js"></script>
+<style>
+    div {
+        overflow: -moz-scrollbars-none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    input#inputTableWyn:hover {
+        border: 0px;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content {
+        color: black;
+    }
+
+    div.elTableWyn {
+        padding: 6px 8px;
+        font-size: 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #9e9e9e;
+    }
+
+    div.elTableWyn:hover {
+        background-color: #ddd;
+    }
+
+    #showResTableWyn, div.elTableWyn {
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none;   
+        -khtml-user-select: none;    
+        -moz-user-select: none;     
+        -ms-user-select: none;       
+        user-select: none;
+    }
+
+    td, th {
+        border: 1px solid black;
+    }
+</style>
+<body onload="loadTable()">
     <header style="display: flex; justify-content: center; align-items: center; color: white; font-size: 38px;">
         Obliczenia za cały rok
     </header>
     <main>
-        <select class="form-select mt-3" style="width: 100px; cursor: pointer; font-size: 18px;">
-            <option>2022</option>
-            <option>2023</option>
-        </select>
+        <div id="divYear" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Rok:</div>
+            <select id="yearTable" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px;">
+                <option>2022</option>
+                <option>2023</option>
+            </select>
+        </div>
+        <br>
+        <div id="divZakres" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Zakres działalności:</div>
+            <div class="dropdown" style="width: 100%; max-width: 800px;">
+                <div id="searchTableWyn" style="display: flex; flex-direction: row;">
+                    <input oninput="changeTableWyn()" type="text" name="inputTableWyn" id="inputTableWyn" style="width: 100%; max-width: 800px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+                    <i class="material-icons" onclick="showResTableWyn()" id="showResTableWyn" style="cursor: pointer; font-size: 32px; color: black; background-color: white; display: flex; justify-content: center; align-items: center;">keyboard_arrow_down</i>
+                </div>
+                <div class="dropdown-content" id="tableWyn" style="width: 100%; max-width: 800px;"></div>
+              </div>
+        </div>
+        <br>
+        <div id="divPrac" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Ilość zatrudnionych pracowników:</div>
+            <input type="text" name="inputPrac" id="inputPrac" style="width: 100%; max-width: 120px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div id="divMieszk" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Liczba mieszkańców:</div>
+            <input type="text" name="inputMieszk" id="inputMieszk" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <input type="button" 
+        style="font-size: 24px; background-color: #04AA6D; border: 0px; padding: 10px 16px; cursor: pointer; color: white;" 
+        value="Odtrzymać kwotę z tabeli"
+        id="getValue"
+        onclick="getValue()">
+        <br>
+        <br>
+        <a style="font-size: 24px; background-color: red; border: 0px; padding: 6px 24px; cursor: pointer; text-decoration: none; color: white;" href="KP.html">Back</a>
     </main>
 </body>
+<script>
+    let year;
+
+    function getValue() {
+        let res = "";
+        let wynBrutto = "";
+
+        try {
+            year = document.getElementById("yearTable").value;
+            let zakres = document.getElementById("inputTableWyn").value;
+            let prac = document.getElementById("inputPrac").value;
+            let mieszk = document.getElementById("inputMieszk").value;
+
+            let table = [];
+            if (year == "2022") {
+                wynBrutto = "3010"
+                table = tableWyn2022;
+            }
+            else {
+                wynBrutto = "3490, 3600"
+                table = tableWyn2023;
+            }
+
+            let indexZakresValue = tableWyn.findIndex(i => i == zakres.toString());
+            let indexMieszkValue;
+
+            if (parseInt(mieszk.toString()) <= 5000)
+                indexMieszkValue = 0;
+            if (parseInt(mieszk.toString()) > 5000 && parseInt(mieszk.toString()) <= 50000)
+                indexMieszkValue = 1;
+            if (parseInt(mieszk.toString()) > 50000)
+                indexMieszkValue = 2;
+
+            res = table[indexZakresValue][prac][indexMieszkValue];
+        }
+        catch {
+            return;
+        }
+        finally {
+            document.getElementsByTagName("main")[0].innerHTML = "";
+            document.getElementsByTagName("main")[0].innerHTML += 
+            `<div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Kwota:</div>
+                <input value="${res}" type="text" name="kwota" id="kwota" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+            </div>
+            <br>
+            <div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Minimalne wynagrodzenie brutto:</div>
+                <div id="wynBrutto" style="width: 100%; max-width: 200px; border: 0px; background-color: white; color: black; padding: 6px 8px; font-size: 20px;">${wynBrutto}</div>
+            </div>
+            <br>
+            <div style="display: flex; flex-direction: row;">
+                <input type="button" 
+                style="margin-right: 24px; font-size: 24px; background-color: #4c84af; border: 0px; padding: 6px 24px; cursor: pointer; color: white;" 
+                value="Result"
+                id="getResult"
+                onclick="getResult()">
+                <input type="button" 
+                style="font-size: 24px; background-color: red; border: 0px; padding: 6px 24px; cursor: pointer; color: white;" 
+                value="Back"
+                id="getBack"
+                onclick="getBack()">
+            </div>`;
+        }
+    }
+
+    function getBack() {
+        document.getElementsByTagName("main")[0].innerHTML = "";
+
+        document.getElementsByTagName("main")[0].innerHTML += 
+        `<div id="divYear" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Rok:</div>
+            <select id="yearTable" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px;">
+                <option>2022</option>
+                <option>2023</option>
+            </select>
+        </div>
+        <br>
+        <div id="divZakres" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Zakres działalności:</div>
+            <div class="dropdown" style="width: 100%; max-width: 800px;">
+                <div id="searchTableWyn" style="display: flex; flex-direction: row;">
+                    <input oninput="changeTableWyn()" type="text" name="inputTableWyn" id="inputTableWyn" style="width: 100%; max-width: 800px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+                    <i class="material-icons" onclick="showResTableWyn()" id="showResTableWyn" style="cursor: pointer; font-size: 32px; color: black; background-color: white; display: flex; justify-content: center; align-items: center;">keyboard_arrow_down</i>
+                </div>
+                <div class="dropdown-content" id="tableWyn" style="width: 100%; max-width: 800px;"></div>
+              </div>
+        </div>
+        <br>
+        <div id="divPrac" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Ilość zatrudnionych pracowników:</div>
+            <input type="text" name="inputPrac" id="inputPrac" style="width: 100%; max-width: 120px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div id="divMieszk" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Liczba mieszkańców:</div>
+            <input type="text" name="inputMieszk" id="inputMieszk" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <input type="button" 
+            style="font-size: 24px; background-color: #04AA6D; border: 0px; padding: 10px 16px; cursor: pointer; color: white;" 
+            value="Odtrzymać kwotę z tabeli"
+            id="getValue"
+            onclick="getValue()">
+        <br>
+        <br>
+        <a style="font-size: 24px; background-color: red; border: 0px; padding: 6px 24px; cursor: pointer; text-decoration: none; color: white;" href="KP.html">Back</a>`;
+    }
+
+    function getResult() {
+        try {
+            document.getElementById("brFormTable").remove();
+            document.getElementById("formTable").remove();
+        }
+        catch {
+
+        }
+
+        try {
+            document.getElementById("brResTable").remove();
+            document.getElementById("brResTable").remove();
+            document.getElementById("resTable").remove();
+        }
+        catch {
+
+        }
+
+        try {
+            document.getElementById("brError").remove();
+            document.getElementById("error").remove();
+        }
+        catch {
+
+        }
+
+        try {
+            let value = parseFloat(document.getElementById("kwota").value.replace(',', '.'));
+            
+            let wynBrutto = document.getElementById("wynBrutto").innerHTML;
+            if (year == 2023) {
+                wynBrutto = wynBrutto.replace(",", "").split(" ");
+                for (let i = 0; i < wynBrutto.length; i++)
+                    wynBrutto[i] = parseFloat(wynBrutto[i]);
+
+                for (let i = 0; i < wynBrutto.length; i++) {
+                    if (isNaN(wynBrutto[i]) || !isFinite(wynBrutto[i])) {
+                        document.getElementsByTagName("main")[0].innerHTML += 
+                        `<br id="brError">
+                        <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych, dane powinne być liczbami</span>`;
+                        return;
+                    }
+                }
+            }
+            else {
+                wynBrutto = parseFloat(document.getElementById("wynBrutto").innerHTML.replace(',', '.'));
+                if (isNaN(wynBrutto) || !isFinite(wynBrutto)) {
+                    document.getElementsByTagName("main")[0].innerHTML += 
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych, dane powinne być liczbami</span>`;
+                    return;
+                }
+            }
+
+            if (isNaN(value) || !isFinite(value)) {
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `<br id="brError">
+                <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych, dane powinne być liczbami</span>`;
+                return;
+            }
+
+            if (year == 2023) {
+                let sklzdr1 = Math.round(parseFloat(wynBrutto[0] * 0.09) * 100) / 100;
+                let sklzdr2 = Math.round(parseFloat(wynBrutto[1] * 0.09) * 100) / 100;
+                let min19_1 = Math.round(sklzdr1 * 0.19 * 100) / 100;
+                let min19_2 = Math.round(sklzdr2 * 0.19 * 100) / 100;
+
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `
+                <br id="brResTable">
+                <br id="brResTable">
+                <div id="resTable" style="overflow-x: scroll; width: 100%">
+                    <table style="width: 100%; max-width: 600px; font-size: 24px;">
+                        <tr>
+                            <th style="width: 100%; text-align: center;" colspan="2">Wysokość miesięcznej składki zdrowotnej zapłaconej w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: left;">I-VI: ${sklzdr1}</td>
+                            <td style="width: 50%; text-align: left;">I-VI: ${sklzdr2}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center;" colspan="2">Wysokość miesięcznej składki zdrowotnej do odliczenia w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: left;">I-VI: ${min19_1}</td>
+                            <td style="width: 50%; text-align: left;">I-VI: ${min19_2}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center;" colspan="2">Miesięczna kwota podatku dochodowego do zapłaty w US</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: left;">I-VI: ${Math.round(value - min19_1)}</td>
+                            <td style="width: 50%; text-align: left;">I-VI: ${Math.round(value - min19_2)}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center;" colspan="2">Roczny podatek dochodowy do zapłaty</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: left;">I-VI: ${Math.round(value - min19_1) * 6}</td>
+                            <td style="width: 50%; text-align: left;">I-VI: ${Math.round(value - min19_2) * 6}</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="text-align: left;">Za rok: ${Math.round(value - min19_1) * 6 + Math.round(value - min19_2) * 6}</td>
+                        </tr>
+                    </table>
+                </div>`;
+
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `
+                <br id="brFormTable">
+                <div id="formTable" style="overflow-x: scroll; width: 100%">
+                    <table style="width: 100%; max-width: 600px; font-size: 24px;">
+                        <tr>
+                            <th style="width: 20%; text-align: center; background-color: grey; color: black;">Miesiąc</th>
+                            <th style="width: 40%; text-align: center; background-color: grey; color: black;">Zapłacona składka</th>
+                            <th style="width: 40%; text-align: center; background-color: grey; color: black;">Odliczona składka</th>
+                        </tr>
+                        <tr>
+                            <td>I</td>
+                            <td>${sklzdr1}</td>
+                            <td>${min19_1}</td>
+                        </tr>
+                        <tr>
+                            <td>II</td>
+                            <td>${sklzdr1}</td>
+                            <td>${min19_1}</td>
+                        </tr>
+                        <tr>
+                            <td>III</td>
+                            <td>${sklzdr1}</td>
+                            <td>${min19_1}</td>
+                        </tr>
+                        <tr>
+                            <td>IV</td>
+                            <td>${sklzdr1}</td>
+                            <td>${min19_1}</td>
+                        </tr>
+                        <tr>
+                            <td>V</td>
+                            <td>${sklzdr1}</td>
+                            <td>${min19_1}</td>
+                        </tr>
+                        <tr>
+                            <td>VI</td>
+                            <td>${sklzdr1}</td>
+                            <td>${min19_1}</td>
+                        </tr>
+                        <tr>
+                            <td>VII</td>
+                            <td>${sklzdr2}</td>
+                            <td>${min19_2}</td>
+                        </tr>
+                        <tr>
+                            <td>VIII</td>
+                            <td>${sklzdr2}</td>
+                            <td>${min19_2}</td>
+                        </tr>
+                        <tr>
+                            <td>IX</td>
+                            <td>${sklzdr2}</td>
+                            <td>${min19_2}</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>${sklzdr2}</td>
+                            <td>${min19_2}</td>
+                        </tr>
+                        <tr>
+                            <td>XI</td>
+                            <td>${sklzdr2}</td>
+                            <td>${min19_2}</td>
+                        </tr>
+                        <tr>
+                            <td>XII</td>
+                            <td>${sklzdr2}</td>
+                            <td>${min19_2}</td>
+                        </tr>
+                    </table>
+                </div>`;
+            }
+            else {
+                let sklzdr = Math.round(wynBrutto * 0.09 * 100) / 100;
+                let min19 = Math.round(sklzdr * 0.19 * 100) / 100;
+
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `
+                <br id="brResTable">
+                <br id="brResTable">
+                <div id="resTable" style="overflow-x: scroll; width: 100%">
+                    <table style="width: 100%; max-width: 600px; font-size: 24px;">
+                        <tr>
+                            <th style="width: 100%; text-align: center;">Wysokość miesięcznej składki zdrowotnej zapłaconej w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">${sklzdr}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center;">Wysokość miesięcznej składki zdrowotnej do odliczenia w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">${min19}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center;">Miesięczna kwota podatku dochodowego do zapłaty w US</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">${Math.round(value - min19)}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center;">Roczny podatek dochodowy do zapłaty</th>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">${Math.round(value - min19) * 12}</td>
+                        </tr>
+                    </table>
+                </div>`;
+
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `
+                <br id="brFormTable">
+                <div id="formTable" style="overflow-x: scroll; width: 100%">
+                    <table style="width: 100%; max-width: 600px; font-size: 24px;">
+                        <tr>
+                            <th style="width: 20%; text-align: center; background-color: grey; color: black;">Miesiąc</th>
+                            <th style="width: 40%; text-align: center; background-color: grey; color: black;">Zapłacona składka</th>
+                            <th style="width: 40%; text-align: center; background-color: grey; color: black;">Odliczona składka</th>
+                        </tr>
+                        <tr>
+                            <td>I</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>II</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>III</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>IV</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>V</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>VI</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>VII</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>VIII</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>IX</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>X</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>XI</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                        <tr>
+                            <td>XII</td>
+                            <td>${sklzdr}</td>
+                            <td>${min19}</td>
+                        </tr>
+                    </table>
+                </div>`;
+            }
+        }
+        catch {
+            document.getElementsByTagName("main")[0].innerHTML += 
+            `<br id="brError">
+            <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych, dane powinne być liczbami</span>`;
+        }
+    }
+
+    function selectEl(elementHtml) {
+        try {
+            document.getElementById("inputTableWyn").value = elementHtml.innerHTML;
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_down";
+            document.getElementById("tableWyn").style.display = "none";
+        }
+        catch {
+            return;
+        }
+    }
+
+    function loadTable() {
+        try 
+        {
+            let inputTableWyn = document.getElementById("inputTableWyn").value;
+            let errsymbols = ['!', '?', ',', '.', ';', '+', '@', '#', '$', '^', '&', '*']
+            for (let i = 0; i < errsymbols.length; i++)
+                inputTableWyn = inputTableWyn.split(errsymbols[i]).join(' ');
+            let buffer = inputTableWyn.split(' ');
+            
+            for (let i = 0; i < buffer.length; i++)
+                if (buffer[i] == "")
+                    buffer.splice(i, 1);
+
+            let res = [];
+
+            for (let i = 0; i < tableWyn.length; i++) {
+                let addElement = true;
+                let element = tableWyn[i].toString().toLowerCase();
+
+                for (let j = 0; j < buffer.length; j++) {
+                    if (element.includes(buffer[j].toString().toLowerCase()) == false) {
+                        addElement = false;
+                        break;
+                    }
+                }
+
+                if (addElement == true)
+                    res.push(element);
+            }
+
+            let tableWynHtml = document.getElementById("tableWyn");
+            tableWynHtml.innerHTML = "";
+            
+            for (let i = 0; i < res.length; i++)
+                tableWynHtml.innerHTML += `<div onclick="selectEl(this)" class="elTableWyn">${res[i]}</div>`;
+        }
+        catch {
+            return;
+        }
+    }
+
+    function showResTableWyn() {
+        // alert(tableWyn);
+        if (document.getElementById("showResTableWyn").innerHTML == "keyboard_arrow_down") {
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_up";
+            document.getElementById("tableWyn").style.display = "block";
+        }
+        else {
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_down";
+            document.getElementById("tableWyn").style.display = "none";
+        }
+    }
+
+    function changeTableWyn() {
+        try {
+            loadTable();
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_up";
+            document.getElementById("tableWyn").style.display = "block";
+        }
+        catch {
+            return;
+        }
+    }
+</script>
 </html>
