@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
     <title>Karta podatkowa i Ryczałt</title>
 </head>
 <style>
+    div#tableDivShow {
+        display: flex;
+        justify-content: center;
+        overflow-x: scroll; 
+        width: 100%;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        div#tableDivShow { 
+            display: block;
+            overflow-x: scroll; 
+            width: 100%;
+        }
+    }
+
     td, th {
         border: 1px solid black;
     }
@@ -32,19 +48,25 @@
 </style>
 <body>
     <header>
-        <div class="listHeader">
+        <div class="icons">
+            <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
+            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">blur_on</i>
+        </div>
+        <div class="listHeader" id="listHeader">
             <a class="elList" href="KP.html">Karta Podatkowa</a>
             <a class="elList" href="Ryczalt.html">Ryczałt</a>
+            <a class="elList" href="#">Skala Podatkowa</a>
+            <a class="elList" href="#">Podatek Liniowy</a>
         </div>
     </header>
     <main style="text-align: center;">
-        <div style="font-size: 20px; font-style: normal; color: #04AA6D;">Te wszystkie informacji będą się zmieniać co roku</span>
+        <div style="font-size: 20px; font-style: normal; color: #04AA6D;">Te wszystkie informacji będą się zmieniać co roku</div>
         <br>
         <br>
         <h1 style="color: white;">PODATKI PRZYCHODOWE I DOCHODOWE</h1>
         <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Tabela aktów prawnych regulujących podatki dochodowe</div>
-        <div style="overflow-x: scroll; display: flex; justify-content: center;"> <!--width: 100%; overflow-x: scroll;-->
+        <div id="tableDivShow"> <!--width: 100%; overflow-x: scroll;-->
             <table style="width: 1000px; border: 1px solid black;">
                 <tr>
                     <th style="width: 220px;">Zakres prawa podatkowego</th>
@@ -73,7 +95,7 @@
         </div>
         <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Tabela form opodatkowania</div>
-        <div style="overflow-x: scroll; display: flex; justify-content: center;">
+        <div id="tableDivShow">
             <table style="width: 1000px; border: 1px solid black;">
                 <tr>
                     <th style="width: 500px;" colspan="2">Zryczałtowane formy opodatkowania</th>
@@ -100,7 +122,7 @@
         </div>
         <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Formy Opodatkowania działalności gospodarczej</div>
-        <div style="overflow-x: scroll; display: flex; justify-content: center;">
+        <div id="tableDivShow">
             <table style="width: 1000px; border: 1px solid black;">
                 <tr>
                     <th style="width: 333px">Forma opodatkowania działalności gospodarczej</th>
@@ -194,4 +216,18 @@
         </div>
     </main>
 </body>
+<script>
+    function showMenu() {
+        if (document.getElementById("iMenu").innerHTML == "blur_on") {
+            document.getElementById("iMenu").innerHTML = "close";
+            document.getElementById("iMenu").style.color = "white";
+            document.getElementById("listHeader").style.display = "flex";
+        }
+        else {
+            document.getElementById("iMenu").innerHTML = "blur_on";
+            document.getElementById("iMenu").style.color = "rgb(188, 106, 246)";
+            document.getElementById("listHeader").style.display = "none";
+        }
+    }
+</script>
 </html>

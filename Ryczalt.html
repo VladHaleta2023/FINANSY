@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
     <title>Karta podatkowa i Ryczałt</title>
@@ -33,9 +34,13 @@
 <script src="data.js"></script>
 <body onload="showTable()">
     <header>
-        <div class="listHeader">
-            <a class="elList" href="">Obliczenia mając 1 przychód</a>
-            <a class="elList" href="">Obliczenia procentowe</a>
+        <div class="icons">
+            <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
+            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">blur_on</i>
+        </div>
+        <div class="listHeader" id="listHeader">
+            <a class="elList" href="ObZaRok.html">Obliczenia za cały rok</a>
+            <a class="elList" href="ObZaM.html">Obliczenia za miesiąc</a>
         </div>
     </header>
     <main>
@@ -124,6 +129,19 @@
         }
         catch {
 
+        }
+    }
+
+    function showMenu() {
+        if (document.getElementById("iMenu").innerHTML == "blur_on") {
+            document.getElementById("iMenu").innerHTML = "close";
+            document.getElementById("iMenu").style.color = "white";
+            document.getElementById("listHeader").style.display = "flex";
+        }
+        else {
+            document.getElementById("iMenu").innerHTML = "blur_on";
+            document.getElementById("iMenu").style.color = "rgb(188, 106, 246)";
+            document.getElementById("listHeader").style.display = "none";
         }
     }
 </script>

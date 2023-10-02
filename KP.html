@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=0.75">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <title>Karta podatkowa i Ryczałt</title>
@@ -31,8 +32,11 @@
 </style>
 <body onload="showTable()">
     <header>
-        <div class="listHeader">
-            <a class="elList" style="background-color: red;" href="index.html">Back</a>
+        <div class="icons">
+            <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
+            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">blur_on</i>
+        </div>
+        <div class="listHeader" id="listHeader">
             <a class="elList" href="ObZaRok.html">Obliczenia za cały rok</a>
             <a class="elList" href="ObZaM.html">Obliczenia za miesiąc</a>
         </div>
@@ -44,6 +48,50 @@
         <div style="font-size: 24px; color: white;"><span style="font-weight: bold;">Karta Podatkowa</span> to najprostsza forma opodatkowania.
             <br>Wysokośc podatku w tej formie opodatkowania nie zależy od faktycznie osiąganych dochodów i ustala przez urząd skarbowy w drodze decyzji.
             <br>Urząd skarbowy raz w roku wyznacza miesięczną stawkę podatku na podstawie aktualnej tabeli stanowiącej załącznik do Ustawy z dnia 20 listopada 1998 r.
+            <br>Przedsiębiorcy rozpoczynający działalność gospodarczą lub planujący zmienić formę opodatkowania <span style="font-weight: bold;">nie mogą skorzystać z karty podatkowej.</span>
+            <br><br><span style="font-weight: bold;">Jakie warunki trzeba spełnić:</span>
+            <br><ul style="display: flex; flex-direction: column;">
+                <li style="list-style-type: circle;">kontynuują opodatkowanie w formie karty podatkowej po 31 grudnia 2021 roku i nie zrezygnują ani nie utracą prawa do opodatkowania w tej formie po 31 grudnia 2021 roku</li>
+                <li style="list-style-type: circle;">prowadzą działalność gospodarczą na terytorium Polski
+                    prowadzą jeden z rodzajów działalności podlegającej opodatkowaniu w formie karty podatkowej, zgodnie z art. 23 <a href="https://isap.sejm.gov.pl/isap.nsf/download.xsp/WDU19981440930/U/D19980930Lj.pdf" target="_blank">Ustawy o zryczałtowanym podatku dochodowym od niektórych przychodów osiąganych przez osoby fizyczne</a></li>
+                <li style="list-style-type: circle;">nie korzystają z usług osób niezatrudnionych na podstawie umowy o pracę ani z usług innych przedsiębiorstw lub zakładów</li>
+                <li style="list-style-type: circle;">małżonek podatnika nie prowadzi działalności gospodarczej w tym samym zakresie, z której przychody (dochody) podlegają odrębnemu opodatkowaniu podatkiem dochodowym na ogólnych zasadach, podatkiem liniowym lub ryczałtem od przychodów ewidencjonowanych</li>
+                <li style="list-style-type: circle;">nie prowadzą innej działalności gospodarczej poza jednym rodzajem działalności wskazanym w zgłoszeniu organowi podatkowemu</li>
+                <li style="list-style-type: circle;">nie wytwarzają wyrobów opodatkowanych podatkiem akcyzowym</li>
+            </ul>
+            <br><span style="font-weight: bold;">Rezygnacja z karty podatkowej:</span>
+            <br><div>Jeżeli chcesz zrezygnować z opodatkowania w formie karty podatkowej, musisz w terminie do 20 stycznia złożyć Naczelnikowi Urzędu Skarbowego:</div>
+            <ul style="display: flex; flex-direction: column;">
+                <li style="list-style-type: circle;">oświadczenie o rezygnacji z opodatkowania w ramach karty podatkowej – wtedy wrócisz do opodatkowania na zasadach ogólnych</li>
+                <li style="list-style-type: circle;">oświadczenie o wyborze opodatkowania podatkiem liniowym bądź ryczałtem od przychodów ewidencjonowanych – wtedy będziesz opodatkowany w wybrany sposób w kolejnym roku podatkowym</li>
+            </ul>
+            <br><span style="font-weight: bold;">Zawieszenie działalności gospodarczej a karta podatkowa</span>
+            <br><div>Jeśli jesteś opodatkowany kartą podatkową, możesz zawiesić działalność gospodarczą na jeden z dwóch sposobów:</div>
+            <ul style="display: flex; flex-direction: column;">
+                <li style="list-style-type: circle;">złożyć wniosek do CEIDG</li>
+                <li style="list-style-type: circle;">zgłosić przerwę w prowadzeniu działalności Naczelnikowi Urzędu Skarbowego najpóźniej w dniu jej rozpoczęcia. Zakończenie przerwy zgłaszasz dzień wcześniej</li>
+            </ul>
+            <a href="https://www.biznes.gov.pl/pl/opisy-procedur/-/proc/885" target="_blank">Jak zawiesić działalność gospodarczą w CEIDG</a>
+            <br><br><span style="font-weight: bold;">Utrata prawa do opodatkowania kartą podatkową</span>
+            <br><div>Utracisz prawo do opodatkowania w formie karty podatkowej w przypadku, gdy:</div>
+            <ul style="display: flex; flex-direction: column;">
+                <li style="list-style-type: circle;">we wniosku o zastosowanie opodatkowania w formie karty podatkowej podałeś dane niezgodne ze stanem faktycznym, co spowodowało:
+                <ul style="display: flex; flex-direction: column;">
+                    <li style="list-style-type: circle;">nieuzasadnione zastosowanie opodatkowania w formie karty podatkowej</li>
+                    <li style="list-style-type: circle;">ustalenie wysokości podatku dochodowego formie karty podatkowej w kwocie niższej, niż gdybyś podał prawidłowe dane</li>
+                </ul></li>
+                <li style="list-style-type: circle;">w ciągu 7 dni nie zawiadomisz Naczelnika Urzędu Skarbowego o zmianach powodujących utratę warunków do opodatkowania w formie karty podatkowej albo mających wpływ na podwyższenie wysokości podatku dochodowego w formie karty podatkowej</li>
+                <li style="list-style-type: circle;">w zawiadomieniu o zmianie danych mających wpływ na wysokość podatku dochodowego w formie karty podatkowej podasz dane niezgodne ze stanem faktycznym</li>
+                <li style="list-style-type: circle;">na rachunku lub fakturze stwierdzających sprzedaż wyrobu, towaru lub wykonanie usługi podasz dane niezgodne ze stanem faktycznym</li>
+            </ul>
+            <br><span style="font-weight: bold;">Zmiana stawki podatku</span>
+            <br>O takich zmianach zawiadom Naczelnika Urzędu Skarbowego, składając <a href="https://www.podatki.gov.pl/media/3680/pit-16z_13-011.pdf" target="_blank">PIT-16Z – informację o zmianach we wniosku o zastosowanie karty podatkowej lub likwidacji prowadzonej działalności.</a> Możesz to zrobić za pośrednictwem CEIDG.
+            <br>Zawiadomienie złóż w terminie 7 dni od momentu zaistnienia okoliczności powodujących zmianę wysokości opodatkowania.
+            <br><br><span style="font-weight: bold;">Zapłata podatku</span>
+            <ul style="display: flex; flex-direction: column;">
+                <li style="list-style-type: circle;"><span style="font-weight: bold;">do 7.</span> dnia następującego po miesiącu, za który jest należna karta podatkowa</li>
+                <li style="list-style-type: circle;">za grudzień danego roku w terminie <span style="font-weight: bold;">do 28 grudnia</span> danego roku</li>
+            </ul>
         </div>
         <br>
         <div class="text">1. Liczymy jaka jest składka zdrowotna: Minimalne wynagrodzenie brutto * 9%</div>
@@ -98,6 +146,19 @@
     </main>
 </body>
 <script>
+    function showMenu() {
+        if (document.getElementById("iMenu").innerHTML == "blur_on") {
+            document.getElementById("iMenu").innerHTML = "close";
+            document.getElementById("iMenu").style.color = "white";
+            document.getElementById("listHeader").style.display = "flex";
+        }
+        else {
+            document.getElementById("iMenu").innerHTML = "blur_on";
+            document.getElementById("iMenu").style.color = "rgb(188, 106, 246)";
+            document.getElementById("listHeader").style.display = "none";
+        }
+    }
+
     function showTable() {
         try {
             let selTable = document.getElementById("yearTable");

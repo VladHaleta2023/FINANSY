@@ -1,11 +1,22 @@
 * {
+    position: relative;
     padding: 0px;
     margin: 0px;
 }
 
 header {
+    position: relative;
     background-color: #1c1d24;
     padding: 16px;
+}
+
+li {
+    list-style-type: none;
+}
+
+ul {
+    display: flex;
+    flex-direction: row;
 }
 
 html {
@@ -18,19 +29,61 @@ main {
     word-wrap: break-word;
 }
 
-.listHeader {
-    display: flex;
-    flex-direction: row;
-}
-
 a.elList {
-    background-color: #4c84af;
+    background-color: #1f2020;
     color: white;
-    margin-right: 24px;
     padding: 16px;
     font-size: 24px;
     border: none;
     text-decoration: none;
     cursor: pointer;
     font-family: Arial, Helvetica, sans-serif;
+    text-align: center;
+}
+
+a.elList:hover {
+    background-color: #4c84af;
+}
+
+i {
+    user-select: none;
+}
+
+i.Menu {
+    font-size: 64px; 
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-end;
+    color: rgb(188, 106, 246);
+}
+
+i.Exit {
+    font-size: 64px; 
+    cursor: pointer;
+    display: flex;
+    justify-content: flex-start;
+    color: red;
+}
+
+@media only screen and (max-width: 1000px) {
+    i.Menu, i.Exit {
+        font-size: 48px;
+    }       
+}
+
+div.listHeader {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    width: 100%;
+    left: 0px;
+    top: 80px;
+    z-index: 1;
+}
+
+div.icons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
