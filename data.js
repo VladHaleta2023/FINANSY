@@ -344,3 +344,23 @@ let tableRycz = [
     ["sprzedaż przetworzonych w sposób inny niż przemyśłowy produktów roślinnych i zwierzących, z wyjątkiem przetworzonych produktów" +
     "roślinnych i zwierzęcych uzyskanych w ramach prowadzonych działów specjalnych produkcji rolnej"]
 ]
+
+let usInne = [[2270, 3792], [3035, 4551], [3792, 5313]]
+
+let handDet = ["żywnością, w tym owocami i warzywami, napojami i wyrobami tytoniowymi", "kwiatami"];
+
+let handDetPrices2022 = [[[[413, 634], [575, 780], [634, 997]], 
+    [[575, 780], [634, 997 ], [780, 1277]], 
+    [[634, 1006], [780, 1277], [997, 1459]], 
+    [[780, 1277], [997, 1459 ], [1345, 1820]]], 
+[[[575, 780], [634, 997 ], [780, 1277]], 
+    [[634, 1006 ], [780, 1277], [997, 1459]], 
+    [[780, 1277], [997, 1459], [1345, 1820]]]];
+
+let handDetPrices2023 = [[[[467, 718], [651, 883], [718, 1129]], 
+[[651, 883 ], [718, 1129], [883, 1446]], 
+[[718, 1139], [883, 1446], [1129, 1653]], 
+[[883, 1446], [1129, 1653], [1523, 2062]]], 
+    [[[651, 883], [718, 1129], [883, 1446]], 
+    [[718, 1139], [883, 1446], [1129, 1653]], 
+    [[883, 1446], [1129, 1653], [1523, 2062]]]];

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
@@ -14,13 +14,6 @@
         justify-content: center;
         overflow-x: scroll; 
         width: 100%;
-    }
-
-    td {
-        border: 1px solid #ddd !important;
-        font-size: 24px !important;
-        text-align: left !important;
-        vertical-align: text-top !important;
     }
 
     div {
@@ -52,9 +45,9 @@
         <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Tabela aktów prawnych regulujących podatki dochodowe</div>
         <div id="tableDivShow"> <!--width: 100%; overflow-x: scroll;-->
-            <table style="width: 1000px; border: 1px solid #ddd;">
+            <table style="width: 1000px;">
                 <tr>
-                    <th style="width: 220px;">Zakres prawa podatkowego</th>
+                    <th style="width: 220px;" id="zakresPP">Zakres prawa podatkowego</th>
                     <th style="width: 280px;">Zasady<br>opodatkowania</th>
                     <th style="width: 500px;">Akty regulujące</th>
                 </tr>
@@ -81,7 +74,7 @@
         <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Tabela form opodatkowania</div>
         <div id="tableDivShow">
-            <table style="width: 1000px; border: 1px solid #ddd;">
+            <table style="width: 1000px;">
                 <tr>
                     <th style="width: 500px;" colspan="2">Zryczałtowane formy opodatkowania</th>
                     <th style="width: 250px;" rowspan="2">Zasady ogólne według skali podatkowej</th>
@@ -108,7 +101,7 @@
         <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Formy Opodatkowania działalności gospodarczej</div>
         <div id="tableDivShow">
-            <table style="width: 1000px; border: 1px solid #ddd;">
+            <table style="width: 1000px;">
                 <tr>
                     <th style="width: 333px">Forma opodatkowania działalności gospodarczej</th>
                     <th style="width: 333px">Karta Podatkowa</th>

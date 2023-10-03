@@ -451,28 +451,28 @@
                 <div id="resTable" style="overflow-x: scroll; width: 100%">
                     <table style="width: 100%; max-width: 600px; font-size: 24px;">
                         <tr>
-                            <th style="width: 100%; text-align: center;">Wysokość miesięcznej składki zdrowotnej zapłaconej w ${year}</th>
+                            <th style="width: 100%; text-align: center !important;">Wysokość miesięcznej składki zdrowotnej zapłaconej w ${year}</th>
                         </tr>
                         <tr>
-                            <td style="text-align: center;">${sklzdr}</td>
+                            <td style="text-align: center !important;">${sklzdr}</td>
                         </tr>
                         <tr>
-                            <th style="width: 100%; text-align: center;">Wysokość miesięcznej składki zdrowotnej do odliczenia w ${year}</th>
+                            <th style="width: 100%; text-align: center !important;">Wysokość miesięcznej składki zdrowotnej do odliczenia w ${year}</th>
                         </tr>
                         <tr>
-                            <td style="text-align: center;">${min19}</td>
+                            <td style="text-align: center !important;">${min19}</td>
                         </tr>
                         <tr>
-                            <th style="width: 100%; text-align: center;">Miesięczna kwota podatku dochodowego do zapłaty w US</th>
+                            <th style="width: 100%; text-align: center !important;">Miesięczna kwota podatku dochodowego do zapłaty w US</th>
                         </tr>
                         <tr>
-                            <td style="text-align: center;">${Math.round(value - min19)}</td>
+                            <td style="text-align: center !important;">${Math.round(value - min19)}</td>
                         </tr>
                         <tr>
-                            <th style="width: 100%; text-align: center;">Roczny podatek dochodowy do zapłaty</th>
+                            <th style="width: 100%; text-align: center !important;">Roczny podatek dochodowy do zapłaty</th>
                         </tr>
                         <tr>
-                            <td style="text-align: center;">${Math.round(value - min19) * 12}</td>
+                            <td style="text-align: center !important;">${Math.round(value - min19) * 12}</td>
                         </tr>
                     </table>
                 </div>`;

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -18,7 +18,7 @@
     }
 
     td, th {
-        border: 1px solid #ddd;
+        border: 2px solid black;
         padding: 8px;
     }
 
@@ -29,6 +29,12 @@
     div::-webkit-scrollbar {
         width: 0;
     }
+
+    @media only screen and (max-width: 1000px) {
+        th#zakresDz {
+            width: 100% !important;
+        }
+    }
 </style>
 <body onload="showTable()">
     <header>
@@ -37,8 +43,8 @@
             <i class="material-icons Menu" onclick="showMenu()" id="iMenu">menu</i>
         </div>
         <div class="listHeader" id="listHeader">
-            <a class="elList" href="ObZaRok.html">Obliczenia za cały rok</a>
-            <a class="elList" href="ObZaM.html">Obliczenia za miesiąc</a>
+            <a class="elList" href="ObZaRok.html">Obliczenia części I za cały rok</a>
+            <a class="elList" href="ObZaM.html">Obliczenia części I za miesiąc</a>
         </div>
     </header>
     <main>
@@ -129,18 +135,36 @@
         <a target="_blank" id="pdfDownload" style="color: white; font-size: 24px; text-decoration: none; padding: 8px 16px; background-color:brown;" href="https://dziennikustaw.gov.pl/M2021000109401.pdf">Show in PDF</a>
         <br>
         <br>
+        <div style="color: white; font-size: 32px; font-style: normal;">Usługi parkingowe</div>
+        <div style="overflow-x: scroll; width: 100%">
+            <table style="width: 900px; font-size: 24px;">
+                <tbody></tbody>
+            </table>
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal;">Usługi inne, gdzie indziej w załączniku niewymienione</div>
+        <div style="overflow-x: scroll; width: 100%">
+            <table style="width: 800px; font-size: 24px;">
+                <tbody></tbody>
+            </table>
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal;">Część II. Usługi w zakresie handlu detalicznego żywnością, napojami, wyrobami
+            tytoniowymi oraz kwiatami
+            </div>
+        <div style="overflow-x: scroll; width: 100%">
+            <table style="width: 1100px; font-size: 24px;">
+                <tbody></tbody>
+            </table>
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal;">Część I. Działalność usługowa oraz wytwórczo-usługowa</div>
         <div style="overflow-x: scroll; width: 100%">
             <table style="width: 1200px; font-size: 24px;">
-                <tr>
-                    <th style="width: 400px; text-align: center;" rowspan="2">Zakres działalności</th>
-                    <th style="width: 80px; text-align: center;" rowspan="2">Oznaczenie stawek</th>
-                    <th style="width: 720px; text-align: center;" colspan="3">W miejscowości o liczbie mieszkańców<br>(wysokość stawek w złotych)</th>
-                </tr>
-                <tr>
-                    <th style="width: 240px;">Do 5000</th>
-                    <th style="width: 240px;">Powyżej 5000 Do 50000</th>
-                    <th style="width: 240px;">Powyżej 50000</th>
-                </tr>
+                
             </table>
         </div>
     </main>
@@ -160,7 +184,7 @@
     function showTable() {
         try {
             let selTable = document.getElementById("yearTable");
-            document.getElementsByTagName("table")[1].innerHTML = `<tr>
+            document.getElementsByTagName("table")[4].innerHTML = `<tr>
                 <th style="width: 400px; text-align: center;" rowspan="2">Zakres działalności</th>
                 <th style="width: 80px; text-align: center;" rowspan="2">Oznaczenie stawek</th>
                 <th style="width: 720px; text-align: center;" colspan="3">W miejscowości o liczbie mieszkańców<br>(wysokość stawek w złotych)</th>
@@ -174,7 +198,144 @@
             if (selTable.value == "2022") {
                 document.getElementById("pdfDownload").href = "https://dziennikustaw.gov.pl/M2021000109401.pdf";
 
-                let tableBody = document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0];
+                document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th style="width: 200px; text-align: center;">Parking o liczbie stanowisk</th>
+                    <th style="width: 700px; text-align: center;">Stawka</th>
+                </tr>
+                <tr>
+                    <td>do 140</td>
+                    <td>7,70 zł od każdego stanowiska</td>
+                </tr>
+                <tr>
+                    <td>powyżej 140 do 180</td>
+                    <td>1078 zł + 11,50 zł od każdego stanowiska powyżej 140</td>
+                </tr>
+                <tr>
+                    <td>powyżej 180</td>
+                    <td>1538 zł + 13,70 zł od każdego stanowiska powyżej 180</td>
+                </tr>`;
+
+                document.getElementsByTagName("table")[2].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th colspan="6" style="width: 600px; text-align: center;">W miejscowości o liczbie mieszkańców
+                        (wysokość stawek w złotych)</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 200px; text-align: center;">Do 5000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Ponad 5000
+                        do 50 000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Powyżej 50 000</th>
+                </tr>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">2270</td>
+                    <td style="text-align: center;">3792</td>
+                    <td style="text-align: center;">3035</td>
+                    <td style="text-align: center;">4551</td>
+                    <td style="text-align: center;">3792</td>
+                    <td style="text-align: center;">5313</td>
+                </tr>`;
+
+                document.getElementsByTagName("table")[3].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th rowspan="3" colspan="2" style="width: 300px; text-align: left;">Usługi w zakresie handlu
+                        detalicznego</th>
+                    <th colspan="6" style="width: 800px; text-align: center;">W miejscowości o liczbie mieszkańców
+                        (wysokość stawek w złotych)</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 200px; text-align: center;">Do 5000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Ponad 5000
+                        do 50 000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Powyżej 50 000</th>
+                </tr>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                </tr>
+                <tr>
+                    <td rowspan="4">żywnością, w tym
+                        owocami
+                        i warzywami,
+                        napojami i wyrobami
+                        tytoniowymi</td>
+                    <td>0</td>
+                    <td style="text-align: center;">413</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">575</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">997</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: center;">575</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">1277</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">1006</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">1277</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">1459</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">1277</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">1459</td>
+                    <td style="text-align: center;">1345</td>
+                    <td style="text-align: center;">1820</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">kwiatami</td>
+                    <td>0</td>
+                    <td style="text-align: center;">575</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">1277</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">1006</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">1277</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">1459</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">1277</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">1459</td>
+                    <td style="text-align: center;">1345</td>
+                    <td style="text-align: center;">1820</td>
+                </tr>`;
+
+                let tableBody = document.getElementsByTagName("table")[4].getElementsByTagName("tbody")[0];
                 let rowIndex = 0;
 
                 for (let i = 0; i < tableWyn.length; i++) {
@@ -204,7 +365,144 @@
             else {
                 document.getElementById("pdfDownload").href = "https://www.dziennikustaw.gov.pl/M2022000112701.pdf";
 
-                let tableBody = document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0];
+                document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th style="width: 200px; text-align: center;">Parking o liczbie stanowisk</th>
+                    <th style="width: 700px; text-align: center;">Stawka</th>
+                </tr>
+                <tr>
+                    <td>do 140</td>
+                    <td>8,70 zł od każdego stanowiska</td>
+                </tr>
+                <tr>
+                    <td>powyżej 140 do 180</td>
+                    <td>1218 zł + 13,00 zł od każdego stanowiska powyżej 140</td>
+                </tr>
+                <tr>
+                    <td>powyżej 180</td>
+                    <td>1738 zł + 15,50 zł od każdego stanowiska powyżej 180</td>
+                </tr>`;
+
+                document.getElementsByTagName("table")[2].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th colspan="6" style="width: 600px; text-align: center;">W miejscowości o liczbie mieszkańców
+                        (wysokość stawek w złotych)</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 200px; text-align: center;">Do 5000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Ponad 5000
+                        do 50 000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Powyżej 50 000</th>
+                </tr>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                </tr>
+                <tr>
+                    <td style="text-align: center;">2571</td>
+                    <td style="text-align: center;">4296</td>
+                    <td style="text-align: center;">3438</td>
+                    <td style="text-align: center;">5156</td>
+                    <td style="text-align: center;">4296</td>
+                    <td style="text-align: center;">6019</td>
+                </tr>`;
+
+                document.getElementsByTagName("table")[3].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th rowspan="3" colspan="2" style="width: 300px; text-align: left;">Usługi w zakresie handlu
+                        detalicznego</th>
+                    <th colspan="6" style="width: 800px; text-align: center;">W miejscowości o liczbie mieszkańców
+                        (wysokość stawek w złotych)</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 200px; text-align: center;">Do 5000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Ponad 5000
+                        do 50 000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Powyżej 50 000</th>
+                </tr>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                </tr>
+                <tr>
+                    <td rowspan="4">żywnością, w tym
+                        owocami
+                        i warzywami,
+                        napojami i wyrobami
+                        tytoniowymi</td>
+                    <td>0</td>
+                    <td style="text-align: center;">467</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">651</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1129</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: center;">651</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">1446</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1139</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">1446</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">1653</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">1446</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">1653</td>
+                    <td style="text-align: center;">1523</td>
+                    <td style="text-align: center;">2062</td>
+                </tr>
+                <tr>
+                    <td rowspan="3">kwiatami</td>
+                    <td>0</td>
+                    <td style="text-align: center;">651</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">1446</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1139</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">1446</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">1653</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">1446</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">1653</td>
+                    <td style="text-align: center;">1523</td>
+                    <td style="text-align: center;">2062</td>
+                </tr>`;
+
+                let tableBody = document.getElementsByTagName("table")[4].getElementsByTagName("tbody")[0];
                 let rowIndex = 0;
 
                 for (let i = 0; i < tableWyn.length; i++) {

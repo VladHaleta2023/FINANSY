@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Karta podatkowa i Ryczałt</title>
+</head>
+<script src="data.js"></script>
+<style>
+    div {
+        overflow: -moz-scrollbars-none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    input#inputTableWyn:hover {
+        border: 0px;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content {
+        color: black;
+    }
+
+    div.elTableWyn {
+        padding: 6px 8px;
+        font-size: 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #9e9e9e;
+    }
+
+    div.elTableWyn:hover {
+        background-color: #ddd;
+    }
+
+    #showResTableWyn, div.elTableWyn {
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none;   
+        -khtml-user-select: none;    
+        -moz-user-select: none;     
+        -ms-user-select: none;       
+        user-select: none;
+    }
+
+    td, th {
+        border: 1px solid black;
+    }
+</style>
+<body onload="loadTable()">
+    <header style="display: flex; justify-content: center; align-items: center; color: white; font-size: 38px;">
+        Obliczenia w zakresie handlu detalicznego
+    </header>
+    <main>
+        <div id="divYear" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Rok:</div>
+            <select oninput="changeWynBrutto()" id="yearTable" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px;">
+                <option>2022</option>
+                <option>2023</option>
+            </select>
+        </div>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Miesiąc:</div>
+            <select id="month" class="form-select mt-3" style="margin: 0px !important; width: 160px; cursor: pointer; font-size: 18px;">
+                <option>Styczeń</option>
+                <option>Luty</option>
+                <option>Marzec</option>
+                <option>Kwiecień</option>
+                <option>Maj</option>
+                <option>Czerwiec</option>
+                <option>Lipiec</option>
+                <option>Sierpień</option>
+                <option>Wrzesień</option>
+                <option>Pazdziernik</option>
+                <option>Listopad</option>
+                <option>Grudzień</option>
+            </select>
+        </div>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;" id="wynBrutto">Wynagrodzenie Brutto: 3010</div>
+        </div>
+        <br>
+        <div id="divZakres" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Usługa w zakresie handlu detalicznego:</div>
+            <div class="dropdown" style="width: 100%; max-width: 800px;">
+                <div id="searchTableWyn" style="display: flex; flex-direction: row;">
+                    <input oninput="changeTableHandDet()" type="text" name="inputTableWyn" id="inputTableWyn" style="width: 100%; max-width: 800px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+                    <i class="material-icons" onclick="showResTableHandDet()" id="showResTableWyn" style="cursor: pointer; font-size: 32px; color: black; background-color: white; display: flex; justify-content: center; align-items: center;">keyboard_arrow_down</i>
+                </div>
+                <div class="dropdown-content" id="tableWyn" style="width: 100%; max-width: 800px;"></div>
+              </div>
+        </div>
+        <br>
+        <div id="divPrac" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Ilość zatrudnionych pracowników:</div>
+            <input type="text" name="inputPrac" id="inputPrac" style="width: 100%; max-width: 120px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div id="divMieszk" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Liczba mieszkańców:</div>
+            <input type="text" name="inputMieszk" id="inputMieszk" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div id="divPrac" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Kwota:</div>
+            <input type="text" name="value" id="value" style="width: 100%; max-width: 120px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div style="display: flex;">
+            <input type="button" style="margin-right: 24px; font-size: 24px; background-color: #4c84af; border: 0px; padding: 6px 24px; cursor: pointer; color: white;" value="Result" id="getResult" onclick="getesult()">
+            <a style="font-size: 24px; background-color: red; border: 0px; padding: 6px 24px; cursor: pointer; text-decoration: none; color: white;" href="KP.html">Back</a>
+        </div>
+        <!--
+        <br id="brError">
+        <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych, dane powinne być liczbami</span>-->
+    </main>
+</body>
+<script>
+    function getesult() {
+        try {
+            document.getElementById("brError").remove();
+            document.getElementById("error").remove();
+        }
+        catch {
+
+        }
+
+        try {
+            let uslug = document.getElementById("inputTableWyn").value;
+            let year = document.getElementById("yearTable").value;
+            let month = document.getElementById("month").value;
+            let prac = parseInt(document.getElementById("inputPrac").value);
+            let mieszk = parseInt(document.getElementById("inputMieszk").value);
+            let value = parseFloat(document.getElementById("value").value);
+
+            if (isNaN(uslug) || !isFinite(uslug) || uslug.toString() != "") {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+            }
+            if (isNaN(prac) || !isFinite(prac)) {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+            }
+            if (isNaN(mieszk) || !isFinite(mieszk)) {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+            }
+            if (isNaN(value) || !isFinite(value)) {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+            }
+
+            let indexTable, indexMieszk, max, min;
+
+            if (uslug.toString() == "kwiatami")
+                indexTable = 1;
+            else
+                indexTable = 0;
+
+            if (mieszk <= 5000)
+                indexMieszk = 0;
+            else if (mieszk > 5000 && mieszk <= 50000)
+                indexMieszk = 1;
+            else
+                indexMieszk = 2;
+
+            if (year == 2022) {
+                min = handDetPrices2022[indexTable][prac][indexMieszk][0];
+                max = handDetPrices2022[indexTable][prac][indexMieszk][1];
+
+                if (value >= min && value <= max) {
+
+                }
+                else {
+                    document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+                }
+            }
+            else {
+                min = handDetPrices2023[indexTable][prac][indexMieszk][0];
+                max = handDetPrices2023[indexTable][prac][indexMieszk][1];
+
+                if (value >= min && value <= max) {
+
+                }
+                else {
+                    document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+                }
+            }
+        }
+        catch {
+            document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Value error: Niedokładne wpisywanie kwoty</span>`;
+                    return;
+        }
+    }
+
+    function changeWynBrutto() {
+        let year = document.getElementById("yearTable").value;
+
+        if (year == 2022)
+            document.getElementById("wynBrutto").innerHTML = "Wynagrodzenie Brutto: 3010";
+        else
+            document.getElementById("wynBrutto").innerHTML = "Wynagrodzenie Brutto: 3490; 3600";
+    }
+
+    function selectEl(elementHtml) {
+        try {
+            document.getElementById("inputTableWyn").value = elementHtml.innerHTML;
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_down";
+            document.getElementById("tableWyn").style.display = "none";
+        }
+        catch {
+            return;
+        }
+    }
+
+    function loadTable() {
+        try 
+        {
+            let inputTableWyn = document.getElementById("inputTableWyn").value;
+            let errsymbols = ['!', '?', ',', '.', ';', '+', '@', '#', '$', '^', '&', '*']
+            for (let i = 0; i < errsymbols.length; i++)
+                inputTableWyn = inputTableWyn.split(errsymbols[i]).join(' ');
+            let buffer = inputTableWyn.split(' ');
+            
+            for (let i = 0; i < buffer.length; i++)
+                if (buffer[i] == "")
+                    buffer.splice(i, 1);
+
+            let res = [];
+
+            for (let i = 0; i < handDet.length; i++) {
+                let addElement = true;
+                let element = handDet[i].toString().toLowerCase();
+
+                for (let j = 0; j < buffer.length; j++) {
+                    if (element.includes(buffer[j].toString().toLowerCase()) == false) {
+                        addElement = false;
+                        break;
+                    }
+                }
+
+                if (addElement == true)
+                    res.push(element);
+            }
+
+            let handDetHTML = document.getElementById("tableWyn");
+            handDetHTML.innerHTML = "";
+            
+            for (let i = 0; i < res.length; i++)
+                handDetHTML.innerHTML += `<div onclick="selectEl(this)" class="elTableWyn">${res[i]}</div>`;
+        }
+        catch {
+            return;
+        }
+    }
+
+    function showResTableHandDet() {
+        if (document.getElementById("showResTableWyn").innerHTML == "keyboard_arrow_down") {
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_up";
+            document.getElementById("tableWyn").style.display = "block";
+        }
+        else {
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_down";
+            document.getElementById("tableWyn").style.display = "none";
+        }
+    }
+
+    function changeTableHandDet() {
+        try {
+            loadTable();
+            document.getElementById("showResTableWyn").innerHTML = "keyboard_arrow_up";
+            document.getElementById("tableWyn").style.display = "block";
+        }
+        catch {
+            return;
+        }
+    }
+</script>
+</html>

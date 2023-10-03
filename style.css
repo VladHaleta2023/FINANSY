@@ -66,17 +66,29 @@ i.Exit {
 }
 
 @media only screen and (max-width: 1000px) {
+    header{
+        font-size: 32px !important;
+    }
+
     div#tableDivShow { 
         display: block !important;
         overflow-x: scroll !important; 
         width: 100% !important;
     }
-    
+
+    i.Menu, i.Exit {
+        font-size: 42px !important;
+    }
+
     td {
-        border: 1px solid #ddd !important;
+        border: 2px solid black !important;
         font-size: 24px !important;
         text-align: left !important;
         vertical-align: text-top !important;
+    }
+
+    div.listHeader {
+        top: 60px !important;
     }
 }
 
