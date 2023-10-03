@@ -66,12 +66,29 @@ i.Exit {
 }
 
 @media only screen and (max-width: 1000px) {
+    header {
+        font-size: 32px !important;
+    }
+
+    div#tableDivShow { 
+        display: block !important;
+        overflow-x: scroll !important; 
+        width: 100% !important;
+        font-size: 18px !important;
+    }
+
+    td, th {
+        text-align: left !important;
+        font-size: 18px !important;
+    }
+
     i.Menu, i.Exit {
-        font-size: 48px;
-    }       
+        font-size: 48px !important;
+    }
 }
 
 div.listHeader {
+    background-color: #1f2020;
     position: absolute;
     display: none;
     flex-direction: column;
