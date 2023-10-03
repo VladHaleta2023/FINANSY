@@ -66,24 +66,16 @@ i.Exit {
 }
 
 @media only screen and (max-width: 1000px) {
-    header {
-        font-size: 32px !important;
-    }
-
     div#tableDivShow { 
         display: block !important;
         overflow-x: scroll !important; 
         width: 100% !important;
-        font-size: 18px !important;
     }
 
     td, th {
         text-align: left !important;
-        font-size: 18px !important;
-    }
-
-    i.Menu, i.Exit {
-        font-size: 48px !important;
+        border: 1px solid #ddd !important;
+        padding: 8px !important;
     }
 }
 
