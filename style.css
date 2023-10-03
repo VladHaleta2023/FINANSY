@@ -71,6 +71,13 @@ i.Exit {
         overflow-x: scroll !important; 
         width: 100% !important;
     }
+    
+    td {
+        border: 1px solid #ddd !important;
+        font-size: 24px !important;
+        text-align: left !important;
+        vertical-align: text-top !important;
+    }
 }
 
 div.listHeader {
