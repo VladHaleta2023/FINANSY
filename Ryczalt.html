@@ -36,7 +36,7 @@
     <header>
         <div class="icons">
             <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
-            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">blur_on</i>
+            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">menu</i>
         </div>
         <div class="listHeader" id="listHeader">
             <a class="elList" href="ObZaRok.html">Obliczenia za cały rok</a>
@@ -133,14 +133,12 @@
     }
 
     function showMenu() {
-        if (document.getElementById("iMenu").innerHTML == "blur_on") {
+        if (document.getElementById("iMenu").innerHTML == "menu") {
             document.getElementById("iMenu").innerHTML = "close";
-            document.getElementById("iMenu").style.color = "white";
             document.getElementById("listHeader").style.display = "flex";
         }
         else {
-            document.getElementById("iMenu").innerHTML = "blur_on";
-            document.getElementById("iMenu").style.color = "rgb(188, 106, 246)";
+            document.getElementById("iMenu").innerHTML = "menu";
             document.getElementById("listHeader").style.display = "none";
         }
     }

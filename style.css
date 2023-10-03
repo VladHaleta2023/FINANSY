@@ -54,7 +54,7 @@ i.Menu {
     cursor: pointer;
     display: flex;
     justify-content: flex-end;
-    color: rgb(188, 106, 246);
+    color: white;
 }
 
 i.Exit {
@@ -62,7 +62,7 @@ i.Exit {
     cursor: pointer;
     display: flex;
     justify-content: flex-start;
-    color: red;
+    color: white;
 }
 
 @media only screen and (max-width: 1000px) {
