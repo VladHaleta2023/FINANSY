@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Karta podatkowa i Ryczałt</title>
+</head>
+<script src="data.js"></script>
+<style>
+    @media only screen and (max-width: 600px) {
+        input#wynBrutto {
+            margin-bottom: 24px; font-size: 24px; padding: 4px 12px; width: 100%;
+            margin-right: 0px !important;
+        }
+
+        div#divVariantZUSObl {
+            display: flex;
+            flex-direction: column !important;
+        }
+
+        div#btnZUSes, div#btnTable {
+            display: flex;
+            flex-direction: column !important;
+        }
+
+        input#clearDataZUS, input#getZUSAutoResult, input#addValue {
+            margin-right: 0px !important;
+            margin-bottom: 16px !important;
+        }
+    }
+
+    div#btnTable {
+        display: flex;
+        flex-direction: row;
+    }
+
+    div {
+        overflow: -moz-scrollbars-none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    input#inputTableWyn:hover {
+        border: 0px;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content {
+        color: black;
+    }
+
+    div.elTableWyn {
+        padding: 6px 8px;
+        font-size: 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #9e9e9e;
+    }
+
+    div.elTableWyn:hover {
+        background-color: #ddd;
+    }
+
+    #showResTableWyn, div.elTableWyn {
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none;   
+        -khtml-user-select: none;    
+        -moz-user-select: none;     
+        -ms-user-select: none;       
+        user-select: none;
+    }
+
+    td, th {
+        border: 1px solid black;
+        vertical-align: top !important;
+    }
+</style>
+<body onload="loadPage()">
+    <header style="display: flex; justify-content: center; align-items: center; color: white; font-size: 38px;">
+        Obliczenia ryczałtu
+    </header>
+    <main>
+        <div style="display: flex; flex-direction: column; color: white; font-size: 24px;">
+            <div style="margin-bottom: 16px; font-size: 24px;">Sposób odliczenia ZUS:</div>
+            <select oninput="showVariant()" id="variants" class="form-select mt-3" style="margin: 0px !important; width: 100%; max-width: 760px; cursor: pointer; font-size: 20px;">
+                <option>Składki na ubezpieczenia społeczne i zdrowotne do odliczenia od przychodów</option>
+                <option>Obliczenia składek ZUS do odliczenia od przychodów</option>
+            </select>
+        </div>
+        <br>
+        <div id="FirstVariant" style="display: none;">
+            <div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px; font-size: 24px;">Status osoby:</div>
+                <select id="status" class="form-select mt-3" style="margin: 0px !important; max-width: 200px; width: 100%; cursor: pointer; font-size: 20px;">
+                    <option>Pracownik</option>
+                    <option>Pracodawca</option>
+                </select>
+            </div>
+            <br>
+            <div id="divZUS" style="display: flex; flex-direction: row; color: white; font-size: 24px;">
+                <div style="margin-right: 16px; font-size: 24px;">Wynagrodzenie Brutto:</div>
+                <div id="divVariantZUSObl" style="display: flex; flex-direction: row; width: 100%; max-width: 300px; justify-content: center; align-items: center;">
+                    <input type="text" name="wynBrutto" id="wynBrutto" style="margin-right: 16px; font-size: 24px; padding: 4px 12px; width: 100%;">
+                </div>
+            </div>
+            <br>
+            <div id="divEmer" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Składka emerytalna:</div>
+                <input type="text" name="inputEmer" id="inputEmer" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divRent" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Składka rentowa:</div>
+                <input type="text" name="inputRent" id="inputRent" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divChor" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Składka chorobowa:</div>
+                <input type="text" name="inputChor" id="inputChor" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divWyp" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Składka wypadkowa:</div>
+                <input type="text" name="inputWyp" id="inputWyp" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divSpol" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Składki społeczne:</div>
+                <input type="text" name="inputSpol" id="inputSpol" style="width: 100%; max-width: 200px; border: 0px; background-color: rgb(180, 255, 180); padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divFP" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">FP:</div>
+                <input type="text" name="inputFP" id="inputFP" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divFS" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">FS:</div>
+                <input type="text" name="inputFS" id="inputFS" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divFPFS" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">FP, FS:</div>
+                <input type="text" name="inputFPFS" id="inputFPFS" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divFGSP" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">FGŚP:</div>
+                <input type="text" name="inputFGSP" id="inputFGSP" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divFPFSFGSP" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">FP, FS, FGŚP:</div>
+                <input type="text" name="inputFPFSFGSP" id="inputFPFSFGSP" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divZdrow" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">Składka zdrowotna:</div>
+                <input type="text" name="inputZdrow" id="inputZdrow" style="width: 100%; max-width: 200px; border: 0px; background-color: rgb(180, 255, 180); padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+            <div id="divZUS" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+                <div style="margin-right: 16px;">ZUS:</div>
+                <input type="text" name="inputZUS" id="inputZUS" style="width: 100%; max-width: 200px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br> 
+            <div id="btnZUSes" style="display: flex; flex-direction: row;">
+                <input value="Clear Data" onclick="clearDataZUS()" type="button" name="clearDataZUS" id="clearDataZUS" 
+                style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
+                    background-color: rgb(0, 0, 120); 
+                    padding: 8px 12px; 
+                    font-size: 24px; text-align: center; margin-right: 16px;">
+                <input value="ZUS Result Auto" onclick="getZUSAutoResult()" type="button" name="getZUSAutoResult" id="getZUSAutoResult" 
+                            style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
+                                background-color: purple; 
+                                padding: 8px 12px; 
+                                font-size: 24px; text-align: center; margin-right: 16px;">
+                <input value="ZUS Result" onclick="getZUSResult()" type="button" name="getZUSResult" id="getZUSResult" 
+                style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
+                    background-color: green; 
+                    padding: 8px 12px; 
+                    font-size: 24px; text-align: center;">
+            </div>
+            <br>
+        </div>
+        <div id="SecondVariant" style="display: block;">
+            <div id="divRazem" style="display: flex; flex-direction: column; color: white; font-size: 24px;">
+                <div style="margin-bottom: 16px;">Składki na ubezpieczenia społeczne i zdrowotne do doliczenia od przychodów:</div>
+                <input type="text" name="inputRazem" id="inputRazem" style="width: 100%; max-width: 300px; border: 0px; background-color: white; padding: 6px 8px; font-size: 24px;">
+            </div>
+            <br>
+        </div>
+        <br>
+        <div id="btnTable">
+            <input value="Dodać przychód" onclick="addValue()" type="button" name="addValue" id="addValue" 
+            style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
+                background-color: green; 
+                padding: 8px 12px; 
+                font-size: 24px; text-align: center; margin-right: 16px;">
+            <input value="Result" onclick="getResult()" type="button" name="ResultValue" id="ResultValue" 
+            style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
+                background-color: #4c84af; 
+                padding: 8px 12px; 
+                font-size: 24px; text-align: center;">
+        </div>
+        <br>
+        <div style="width: 100%; overflow-x: scroll;">
+            <table style="width: 1200px; font-size: 24px;">
+                <tr>
+                    <th style="width: 300px; text-align: center;">Przychód</th>
+                    <th style="width: 140px; text-align: center;">Stawka (%)</th>
+                    <th style="width: 640px; text-align: center;">Przykłady przychodów opodatkowanych ryczałtem</th>
+                    <th style="width: 120px; text-align: center;"></th>
+                </tr>
+                <tbody></tbody>
+            </table>
+        </div>
+        <!--
+        <div style="display: flex;">
+            <input type="button" style="margin-right: 24px; font-size: 24px; background-color: #4c84af; border: 0px; padding: 6px 24px; cursor: pointer; color: white;" value="Result" id="getResult" onclick="getResult()">
+            <a style="font-size: 24px; background-color: red; border: 0px; padding: 6px 24px; cursor: pointer; text-decoration: none; color: white;" href="KP.html">Back</a>
+        </div>
+        -->
+    </main>
+</body>
+<script>
+    let uslugs = [];
+    let wynBrutto, status, emer, rent, chor, wyp, spol, zdr, fp, fs, fpfs, fgsp, fpfsfgsp, zus;
+    let resZUS;
+
+    let resTable, ZUS_str;
+
+    function getResult() {
+        getResTable();
+
+        try {
+            document.getElementById("tableResult").remove();
+        }
+        catch {
+
+        }
+
+        if (resTable.length == 1) {
+            let ZUS = parseFloat(Math.round(document.getElementById("inputRazem").value.replace(",", ".") * 100) / 100);
+            ZUS_str = ZUS;
+            let resValue = parseFloat(Math.round(resTable[0][0].replace(",", ".") * 100) / 100);
+            let resStawka = parseFloat(Math.round(resTable[0][1].replace(",", ".") * 100) / 100);
+
+            if (!isNaN(resValue) && isFinite(resValue) && resValue != "" && 
+                !isNaN(resStawka) && isFinite(resStawka) && resStawka != "") {
+                try {
+                    document.getElementsByTagName("main")[0].innerHTML +=
+                    `<div style="width: 100%; overflow-x: scroll;" id="tableResult">
+                        <table style="width: 700px; font-size: 24px;">
+                            <tr>
+                                <th style="width: 500px; text-align: center;">Wyszczególnienie</th>
+                                <th style="width: 200px; text-align: center;">Obliczenia</th>
+                            </tr>
+                            <tbody>
+                                <tr>
+                                    <td>Przychody uzyskane</td>
+                                    <td style="text-align: center;">${resValue}</td>
+                                </tr>
+                                <tr>
+                                    <td>Składki na ubezpieczenia społeczne i zdrowotne do doliczenia od przychodów:</td>
+                                    <td style="text-align: center;">${ZUS}</td>
+                                </tr>
+                                <tr>
+                                    <td>Podstawa opodatkowania po zaokrągleniu do pełnych złotych:</td>
+                                    <td style="text-align: center;">${Math.round(parseFloat(Math.round(parseFloat(resValue - ZUS) * 100) / 100))}</td>
+                                </tr>
+                                <tr>
+                                    <td>Zryczałtowany podatek dochodowy do zapłaty, po zaokrągleniu do pełnych złotych:</td>
+                                    <td style="text-align: center;">${Math.round(parseFloat(Math.round(parseFloat(((resValue - ZUS) * (resStawka / 100))) * 100) / 100))}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>`;
+                }
+                catch {
+                    ZUS_str = document.getElementById("inputRazem").value.replace(",", ".");
+                }
+                finally {
+                    document.getElementById("inputRazem").value = ZUS_str;
+                    putResTable();
+                }
+            }
+        }
+        else if (resTable.length > 1) {
+            let sumValues = 0;
+            let ZUS = parseFloat(Math.round(document.getElementById("inputRazem").value.replace(",", ".") * 100) / 100);
+            ZUS_str = ZUS;
+
+            let arrRes = [];
+            for (let i = 0; i < resTable.length; i++) {
+                try {
+                    let resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    let resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                    sumValues += resValue;
+                }
+                catch {
+
+                }
+            }
+            
+            for (let i = 0; i < resTable.length; i++) {
+                let resValue, resStawka;
+
+                try {
+                    resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                }
+                catch {
+                    break;
+                }
+
+                try {
+                    let procent = parseFloat(Math.round(parseFloat(resValue / sumValues) * 100) / 100);
+                    arrRes.push(procent);
+                    let value = parseFloat(Math.round(parseFloat((ZUS * procent) * 100)) / 100);
+                    arrRes.push(value);
+                }
+                catch {
+
+                }
+            }
+
+            for (let i = 0; i < resTable.length; i++) {
+                let resValue, resStawka;
+
+                try {
+                    resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                }
+                catch {
+                    break;
+                }
+
+                try {
+                    let procent = parseFloat(Math.round(parseFloat(resValue / sumValues) * 100) / 100);
+                    let value = parseFloat(Math.round(parseFloat((ZUS * procent) * 100)) / 100);
+                    let opod = parseFloat(Math.round(parseFloat(resValue - value) * 100) / 100);
+                    arrRes.push(opod);
+                }
+                catch {
+
+                }
+            }
+
+            let sumKwRycz = 0;
+            for (let i = 0; i < resTable.length; i++) {
+                let resValue, resStawka;
+
+                try {
+                    resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                }
+                catch {
+                    break;
+                }
+
+                try {
+                    let procent = parseFloat(Math.round(parseFloat(resValue / sumValues) * 100) / 100);
+                    let value = parseFloat(Math.round(parseFloat((ZUS * procent) * 100)) / 100);
+                    let opod = parseFloat(Math.round(parseFloat(resValue - value) * 100) / 100);
+                    let kwRycz = parseFloat(Math.round(parseFloat((opod * resStawka / 100) * 100)) / 100);
+                    sumKwRycz += kwRycz;
+                    arrRes.push(kwRycz);
+                }
+                catch {
+                    
+                }
+            }
+
+            arrRes.push(sumKwRycz);
+            arrRes.push(Math.round(sumKwRycz));
+
+
+            try {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                `<div style="width: 100%; overflow-x: scroll;" id="tableResult">
+                    <table style="width: 800px; font-size: 24px;">
+                        <tr>
+                            <th colspan="2" style="width: 800px; text-align: center;">1. Wyliczenie składek na ubezpieczenia społeczne do dliczenia od przychodu opodatkowanego według różnych stawek:</th>
+                        </tr>
+                        <tbody>
+                            
+                        </tbody>
+                    </table>
+                </div>`;
+            }
+            catch {
+                ZUS_str = document.getElementById("inputRazem").value.replace(",", ".");
+            }
+            finally {
+                document.getElementById("inputRazem").value = ZUS_str;
+                putResTable();
+            }
+
+            let arrResIndex = 0;
+            for (let i = 0; i < resTable.length; i++) {
+                let resValue, resStawka;
+
+                try {
+                    resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                }
+                catch {
+                    break;
+                }
+
+                try {
+                    document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML +=
+                    `<tr>
+                        <td style="width: 80%">procentowy udział przychodów opodatkowanych stawką ${resStawka}% w przychodach ogółem</td>
+                        <td style="width: 20%">${arrRes[arrResIndex++] * 100}%</td>
+                    <tr>
+                    <tr>
+                        <td>składki do obliczenia od przychodu opodatkowanego ${resStawka}%</td>
+                        <td>${arrRes[arrResIndex++]}</td>
+                    </tr>`;
+                }
+                catch {
+
+                }
+            }
+
+            try {
+                document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML +=
+                `<tr>
+                    <th colspan="2" style="width: 800px; text-align: center;">2. Wyliczenie podstaw opodatkowania ryczałtem według różnych stawek:</th>
+                </tr>`;
+            }
+            catch {
+
+            }
+
+            for (let i = 0; i < resTable.length; i++) {
+                let resValue, resStawka;
+
+                try {
+                    resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                }
+                catch {
+                    break;
+                }
+
+                try {
+                    document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML +=
+                    `<tr>
+                        <td>podstawa obliczenia ryczałtu dla stawki ${resStawka}%</td>
+                        <td>${arrRes[arrResIndex++]}</td>
+                    <tr>`;
+                }
+                catch {
+
+                }
+            }
+
+            try {
+                document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML +=
+                `<tr>
+                    <th colspan="2" style="width: 800px; text-align: center;">3. Wyliczenie zryczałtowanego podatku dochodowego według różnych stawek:</th>
+                </tr>`;
+            }
+            catch {
+
+            }
+
+            for (let i = 0; i < resTable.length; i++) {
+                let resValue, resStawka;
+
+                try {
+                    resValue = parseFloat(Math.round(resTable[i][0].replace(",", ".") * 100) / 100);
+                    resStawka = parseFloat(Math.round(resTable[i][1].replace(",", ".") * 100) / 100);
+                }
+                catch {
+                    break;
+                }
+
+                try {
+                    document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML +=
+                    `<tr>
+                        <td>kwota ryczałtu według stawki ${resStawka}%</td>
+                        <td>${arrRes[arrResIndex++]}</td>
+                    <tr>`;
+                }
+                catch {
+
+                }
+            }
+
+            try {
+                document.getElementsByTagName("table")[1].getElementsByTagName("tbody")[0].innerHTML +=
+                `<tr>
+                    <td>kwota ryczałtu według razem</td>
+                    <td>${arrRes[arrResIndex++]}</td>
+                <tr>
+                <tr>
+                    <th colspan="2" style="width: 800px; text-align: center;">4. Wyliczenie zryczałtowanego podatku dochodowego do zapłaty:</th>
+                </tr>
+                <tr>
+                    <td>należny ryczałt po zaokrągleniu</td>
+                    <td>${arrRes[arrResIndex++]}</td>
+                </tr>`;
+            }
+            catch {
+
+            }
+        }
+    }
+
+    function putResTable() {
+        try { 
+            let lines = document.getElementsByTagName("table")[0].getElementsByTagName("tr").length - 1;
+
+            for (let i = 0; i < lines; i++) {
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[0].getElementsByTagName("input")[0].value = resTable[i][0];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("input")[0].value = resTable[i][1];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = resTable[i][2];
+            }
+        }
+        catch {
+            return;
+        }
+    }
+
+    function getResTable() {
+        try {
+            resTable = [];
+            let lines = document.getElementsByTagName("table")[0].getElementsByTagName("tr").length - 1;
+
+            for (let i = 0; i < lines; i++) {
+                let buffer = [];
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[0].getElementsByTagName("input")[0].value);
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("input")[0].value);
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("select")[0].value);
+                resTable.push(buffer);
+            }
+        }
+        catch {
+            return;
+        }
+    }
+
+    function onChangeUsluga(elementStawka) {
+        let index;
+
+        for (let i = 0; i < tableRycz.length; i++) {
+            for(let j = 0; j < tableRycz[i].length; j++) {
+                if (tableRycz[i][j] == elementStawka.value.toString()) {
+                    index = i;
+                    break;
+                }
+            }
+        }
+
+        elementStawka.parentElement.parentElement.getElementsByTagName("td")[1].getElementsByTagName("input")[0].value = tableRyczStawki[index];
+        getResTable();
+    }
+
+    function addValue() {
+        try {
+            getResTable();
+        }
+        catch {
+
+        }
+
+        try {
+            document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML +=
+            `<tr>
+                <td>
+                    <input type="text" name="inputValue" id="inputValue" 
+                        style="width: 100%; border: 1px solid black; background-color: white; 
+                            padding: 6px 8px; font-size: 20px;">
+                </td>
+                <td>
+                    <input value="17" type="text" name="inputStawka" id="inputStawka" 
+                    style="width: 100%; border: 1px solid black; background-color: white; 
+                        padding: 6px 8px; font-size: 20px;">
+                </td>
+                <td>
+                    <select id="usluga" onchange="onChangeUsluga(this)" class="form-select mt-3" style="width: 100%; max-width: 640px; margin: 0px !important; cursor: pointer; font-size: 20px;"></select>
+                </td>
+                <td>
+                    <input type="button" value="Usunąć" style="
+                        cursor: pointer; color: white; border: 0px; 
+                        background-color: red; 
+                        padding: 4px 18px; 
+                        font-size: 24px; text-align: center;" onclick="removeLine(this)"></td>
+            </tr>`;
+            loadPage();
+            putResTable();
+        }
+        catch {
+            return;
+        }
+    }
+
+    function loadPage() {
+        getUslugs();
+        
+        try {
+            let tbody = document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0];
+            let lastTr = tbody.getElementsByTagName("tr")[tbody.getElementsByTagName("tr").length - 1];
+            let select = lastTr.getElementsByTagName("td")[2].getElementsByTagName("select")[0];
+            
+            for (let i = 0; i < uslugs.length; i++)
+                select.innerHTML += `<option>${uslugs[i]}</option>`;
+        }
+        catch {
+            return;
+        }
+    }
+
+    function removeLine(btnRemove) {
+        btnRemove.parentElement.parentElement.remove();
+    }
+
+    function getUslugs() {
+        for (let i = 0; i < tableRycz.length; i++)
+            for (let j = 0; j < tableRycz[i].length; j++)
+                uslugs.push(tableRycz[i][j]);
+    }
+
+    function clearDataZUS() {
+        try {
+            wynBrutto = document.getElementById("wynBrutto").value = "";
+            emer = document.getElementById("inputEmer").value = "";
+            rent = document.getElementById("inputRent").value = "";
+            chor = document.getElementById("inputChor").value = "";
+            wyp = document.getElementById("inputWyp").value = "";
+            spol = document.getElementById("inputSpol").value = "";
+            zdr = document.getElementById("inputZdrow").value = "";
+            fp = document.getElementById("inputFP").value = "";
+            fs = document.getElementById("inputFS").value = "";
+            fpfs = document.getElementById("inputFPFS").value = "";
+            fgsp = document.getElementById("inputFGSP").value = "";
+            fpfsfgsp = document.getElementById("inputFPFSFGSP").value = "";
+            zus = document.getElementById("inputZUS").value = "";
+        }
+        catch {
+            return;
+        }
+    }
+
+    function showVariant() {
+        try {
+            if (document.getElementById("variants").value == "Obliczenia składek ZUS do odliczenia od przychodów") {
+                if (document.getElementById("FirstVariant").style.display == "none")
+                    document.getElementById("FirstVariant").style.display = "block";
+                document.getElementById("SecondVariant").style.display = "none";
+            }
+            else {
+                if (document.getElementById("SecondVariant").style.display == "none")
+                    document.getElementById("SecondVariant").style.display = "block";
+                document.getElementById("FirstVariant").style.display = "none";
+            }
+        }
+        catch {
+            return;
+        }
+    }
+
+    function getZUSAutoResult() {
+        try {
+            wynBrutto = document.getElementById("wynBrutto").value.toString().replace(",", ".");
+        }
+        catch {
+
+        }
+
+        try {
+            status = document.getElementById("status").value.toString();
+        }
+        catch {
+
+        }
+
+        try {
+            emer = document.getElementById("inputEmer").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            rent = document.getElementById("inputRent").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            chor = document.getElementById("inputChor").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            wyp = document.getElementById("inputWyp").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            spol = document.getElementById("inputSpol").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            zdr = document.getElementById("inputZdrow").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fp = document.getElementById("inputFP").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fs = document.getElementById("inputFS").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fpfs = document.getElementById("inputFPFS").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fgsp = document.getElementById("inputFGSP").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fpfsfgsp = document.getElementById("inputFPFSFGSP").value.toString().replace(",", ".");
+        }
+        catch {
+
+        }
+
+        try {
+            zus = document.getElementById("inputZUS").value.toString().replace(",", ".");
+        }
+        catch {
+
+        }
+
+        function writeTableJob() {
+            try {
+                document.getElementById("wynBrutto").value = wynBrutto;
+                emer = document.getElementById("inputEmer").value = parseFloat(Math.round(wynBrutto * 0.0976 * 100) / 100);
+                rent = document.getElementById("inputRent").value = parseFloat(Math.round(wynBrutto * 0.015 * 100) / 100);
+                chor = document.getElementById("inputChor").value = parseFloat(Math.round(wynBrutto * 0.0245 * 100) / 100);
+                wyp = document.getElementById("inputWyp").value = 0;
+                spol = document.getElementById("inputSpol").value = parseFloat(Math.round(parseFloat(emer + rent + chor) * 100) / 100);
+                zdr = document.getElementById("inputZdrow").value = parseFloat(Math.round((wynBrutto - spol) * 0.09 * 100) / 100);
+                fp = document.getElementById("inputFP").value = 0;
+                fs = document.getElementById("inputFS").value = 0;
+                fpfs = document.getElementById("inputFPFS").value = 0;
+                fgsp = document.getElementById("inputFGSP").value = 0;
+                fpfsfgsp = document.getElementById("inputFPFSFGSP").value = 0;
+                zus = document.getElementById("inputZUS").value = parseFloat(Math.round(parseFloat(spol + zdr) * 100) / 100);
+            }
+            catch {
+
+            }
+        }
+
+        function writeTableMeneger() {
+            try {
+                document.getElementById("wynBrutto").value = wynBrutto;
+                emer = document.getElementById("inputEmer").value = parseFloat(Math.round(wynBrutto * 0.0976 * 100) / 100);
+                rent = document.getElementById("inputRent").value = parseFloat(Math.round(wynBrutto * 0.065 * 100) / 100);
+                chor = document.getElementById("inputChor").value = 0;
+                wyp = document.getElementById("inputWyp").value = parseFloat(Math.round(wynBrutto * 0.0167 * 100) / 100);
+                spol = document.getElementById("inputSpol").value = parseFloat(Math.round(parseFloat(emer + rent + wyp) * 100) / 100);
+                zdr = document.getElementById("inputZdrow").value = 0;
+                fp = document.getElementById("inputFP").value = parseFloat(Math.round(wynBrutto * 0.01 * 100) / 100);
+                fs = document.getElementById("inputFS").value = parseFloat(Math.round(wynBrutto * 0.0145 * 100) / 100);
+                fpfs = document.getElementById("inputFPFS").value = parseFloat(Math.round(wynBrutto * 0.0245 * 100) / 100);
+                fgsp = document.getElementById("inputFGSP").value = parseFloat(Math.round(wynBrutto * 0.001 * 100) / 100);
+                fpfsfgsp = document.getElementById("inputFPFSFGSP").value = parseFloat(Math.round(wynBrutto * 0.0255 * 100) / 100);
+                zus = document.getElementById("inputZUS").value = parseFloat(Math.round(parseFloat(spol + fpfsfgsp) * 100) / 100);
+            }
+            catch {
+
+            }
+        }
+
+        if(status.toString() == "Pracownik") {
+            wynBrutto = parseFloat(Math.round(parseFloat(wynBrutto) * 100) / 100);
+            emer = parseFloat(Math.round(parseFloat(emer) * 100) / 100);
+            rent = parseFloat(Math.round(parseFloat(rent) * 100) / 100);
+            chor = parseFloat(Math.round(parseFloat(chor) * 100) / 100);
+            spol = parseFloat(Math.round(parseFloat(spol) * 100) / 100);
+
+            if (!isNaN(wynBrutto) && isFinite(wynBrutto) && wynBrutto != "") {
+                writeTableJob();
+                return;
+            }
+
+            if (!isNaN(emer) && isFinite(emer) && emer != "") {
+                wynBrutto = parseFloat(Math.round(emer * 100 / 9.76) * 100 / 100)
+                writeTableJob();
+                return;
+            }
+
+            if (!isNaN(rent) && isFinite(rent) && rent != "") {
+                wynBrutto = parseFloat(Math.round(rent * 100 / 1.5) * 100 / 100)
+                writeTableJob();
+                return;
+            }
+
+            if (!isNaN(chor) && isFinite(chor) && chor != "") {
+                wynBrutto = parseFloat(Math.round(chor * 100 / 2.45) * 100 / 100)
+                writeTableJob();
+                return;
+            }
+
+            if (!isNaN(spol) && isFinite(spol) && spol != "") {
+                wynBrutto = parseFloat(Math.round(spol * 100 / 13.71) * 100 / 100)
+                writeTableJob();
+                return;
+            }   
+        }
+        else {
+            wynBrutto = parseFloat(Math.round(parseFloat(wynBrutto) * 100) / 100);
+            wynBrutto = parseFloat(Math.round(parseFloat(wynBrutto) * 100) / 100);
+            emer = parseFloat(Math.round(parseFloat(emer) * 100) / 100);
+            rent = parseFloat(Math.round(parseFloat(rent) * 100) / 100);
+            wyp = parseFloat(Math.round(parseFloat(wyp) * 100) / 100);
+            spol = parseFloat(Math.round(parseFloat(spol) * 100) / 100);
+            fp = parseFloat(Math.round(parseFloat(fp) * 100) / 100);
+            fs = parseFloat(Math.round(parseFloat(fs) * 100) / 100);
+            fpfs = parseFloat(Math.round(parseFloat(fpfs) * 100) / 100);
+            fgsp = parseFloat(Math.round(parseFloat(fgsp) * 100) / 100);
+            fpfsfgsp = parseFloat(Math.round(parseFloat(fpfsfgsp) * 100) / 100);
+            zus = parseFloat(Math.round(parseFloat(zus) * 100) / 100);
+
+            if (!isNaN(wynBrutto) && isFinite(wynBrutto) && wynBrutto != "") {
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(emer) && isFinite(emer) && emer != "") {
+                wynBrutto = parseFloat(Math.round(emer * 100 / 9.76) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(rent) && isFinite(rent) && rent != "") {
+                wynBrutto = parseFloat(Math.round(rent * 100 / 6.5) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(wyp) && isFinite(wyp) && wyp != "") {
+                wynBrutto = parseFloat(Math.round(wyp * 100 / 1.67) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(spol) && isFinite(spol) && spol != "") {
+                wynBrutto = parseFloat(Math.round(spol * 100 / 17.93) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(fp) && isFinite(fp) && fp != "") {
+                wynBrutto = parseFloat(Math.round(fp * 100 / 1) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(fs) && isFinite(fs) && fs != "") {
+                wynBrutto = parseFloat(Math.round(fs * 100 / 1.45) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(fpfs) && isFinite(fpfs) && fpfs != "") {
+                wynBrutto = parseFloat(Math.round(fpfs * 100 / 2.45) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(fgsp) && isFinite(fgsp) && fgsp != "") {
+                wynBrutto = parseFloat(Math.round(fgsp * 100 / 0.1) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(fpfsfgsp) && isFinite(fpfsfgsp) && fpfsfgsp != "") {
+                wynBrutto = parseFloat(Math.round(fpfsfgsp * 100 / 2.55) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+
+            if (!isNaN(zus) && isFinite(zus) && zus != "") {
+                wynBrutto = parseFloat(Math.round(zus * 100 / 20.48) * 100 / 100)
+                writeTableMeneger();
+                return;
+            }
+        }
+    }
+
+    function getZUSResult() {
+        try {
+            wynBrutto = document.getElementById("wynBrutto").value.toString().replace(",", ".");
+        }
+        catch {
+
+        }
+
+        try {
+            status = document.getElementById("status").value.toString();
+        }
+        catch {
+
+        }
+
+        try {
+            emer = document.getElementById("inputEmer").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            rent = document.getElementById("inputRent").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            chor = document.getElementById("inputChor").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            wyp = document.getElementById("inputWyp").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            spol = document.getElementById("inputSpol").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            zdr = document.getElementById("inputZdrow").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fp = document.getElementById("inputFP").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fs = document.getElementById("inputFS").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fpfs = document.getElementById("inputFPFS").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fgsp = document.getElementById("inputFGSP").value.toString().replace(",", ".");;
+        }
+        catch {
+
+        }
+
+        try {
+            fpfsfgsp = document.getElementById("inputFPFSFGSP").value.toString().replace(",", ".");
+        }
+        catch {
+
+        }
+
+        try {
+            zus = document.getElementById("inputZUS").value.toString().replace(",", ".");
+        }
+        catch {
+
+        }
+
+        try {
+            resZUS = 0;
+            document.getElementById("FirstVariant").style.display = "none";
+            document.getElementById("SecondVariant").style.display = "block";
+            document.getElementById("variants").value = "Składki na ubezpieczenia społeczne i zdrowotne do odliczenia od przychodów";
+            
+            if (!isNaN(zdr) && isFinite(zdr) && zdr != "")
+                resZUS += parseFloat(Math.round(parseFloat(zdr / 2) * 100) / 100);
+
+            if (status == "Pracownik") {
+                if (!isNaN(spol) && isFinite(spol) && spol != "")
+                    resZUS += parseFloat(Math.round(parseFloat(spol) * 100) / 100);
+                else {
+                    let newspol = 0;
+                    if (!isNaN(emer) && isFinite(emer) && emer != "")
+                        newspol += parseFloat(Math.round(parseFloat(emer) * 100) / 100);
+                    if (!isNaN(rent) && isFinite(rent) && rent != "")
+                        newspol += parseFloat(Math.round(parseFloat(rent) * 100) / 100);
+                    if (!isNaN(chor) && isFinite(chor) && chor != "")
+                        newspol += parseFloat(Math.round(parseFloat(chor) * 100) / 100);
+                    resZUS += parseFloat(Math.round(parseFloat(newspol) * 100) / 100);
+                }
+            }
+            else {
+                if (!isNaN(spol) && isFinite(spol) && spol != "")
+                    resZUS += parseFloat(Math.round(parseFloat(spol) * 100) / 100);
+                else {
+                    let newspol = 0;
+                    if (!isNaN(emer) && isFinite(emer) && emer != "")
+                        newspol += parseFloat(Math.round(parseFloat(emer) * 100) / 100);
+                    if (!isNaN(rent) && isFinite(rent) && rent != "")
+                        newspol += parseFloat(Math.round(parseFloat(rent) * 100) / 100);
+                    if (!isNaN(wyp) && isFinite(wyp) && wyp != "")
+                        newspol += parseFloat(Math.round(parseFloat(wyp) * 100) / 100);
+                    resZUS += parseFloat(Math.round(parseFloat(newspol) * 100) / 100);
+                }
+
+                if (resZUS == 0 && !isNaN(zus) && isFinite(zus) && zus != "") {
+                    if (!isNaN(fpfsfgsp) && isFinite(fpfsfgsp) && fpfsfgsp != "")
+                        resZUS += parseFloat(Math.round(parseFloat(zus - fpfsfgsp) * 100) / 100)
+                }
+
+                if (resZUS == 0 && !isNaN(zus) && isFinite(zus) && zus != "") {
+                    if (!isNaN(fpfs) && isFinite(fpfs) && fpfs != "")
+                        resZUS += parseFloat(Math.round(parseFloat(zus - fpfs) * 100) / 100)
+                    if (!isNaN(fgsp) && isFinite(fgsp) && fgsp != "")
+                        resZUS += parseFloat(Math.round(parseFloat(zus - fgsp) * 100) / 100)
+                }
+
+                if (resZUS == 0 && !isNaN(zus) && isFinite(zus) && zus != "") {
+                    if (!isNaN(fp) && isFinite(fp) && fp != "")
+                        resZUS += parseFloat(Math.round(parseFloat(zus - fp) * 100) / 100)
+                    if (!isNaN(fs) && isFinite(fs) && fs != "")
+                        resZUS += parseFloat(Math.round(parseFloat(zus - fs) * 100) / 100)
+                    if (!isNaN(fgsp) && isFinite(fgsp) && fgsp != "")
+                        resZUS += parseFloat(Math.round(parseFloat(zus - fgsp) * 100) / 100)
+                }
+            }
+        }
+        catch {
+            
+        }
+        finally {
+            document.getElementById("inputRazem").value = parseFloat(Math.round(parseFloat(resZUS) * 100) / 100);;
+        }
+    }
+</script>
+</html>

@@ -45,10 +45,18 @@
         <div class="listHeader" id="listHeader">
             <a class="elList" href="ObZaRok.html">Obliczenia części I za cały rok</a>
             <a class="elList" href="ObZaM.html">Obliczenia części I za miesiąc</a>
+            <a class="elList" href="OblZakHandlDet.html">Obliczenia części II i części III</a>
+            <a class="elList" href="inneUslugi.html">Obliczenia usług innych</a>
+            <a class="elList" href="parking.html">Obliczenia usług parkingowych</a>
         </div>
     </header>
     <main>
         <span style="font-size: 20px; font-style: italic; color: #04AA6D;">Te wszystkie informacji będą się zmieniać co roku</span>
+        <br>
+        <span style="font-size: 20px; font-style: italic; color: red;">Jeszcze są nie gotowe dane od części IV Karty Podatkowej!</span>
+        <br>
+        <br>
+        <div style="color: white; font-size: 48px; width: 100%; font-weight: bold;">Karta Podatkowa</div>
         <br>
         <br>
         <div style="font-size: 24px; color: white;"><span style="font-weight: bold;">Karta Podatkowa</span> to najprostsza forma opodatkowania.
@@ -161,6 +169,15 @@
         </div>
         <br>
         <br>
+        <div style="color: white; font-size: 32px; font-style: normal;">Część III. Usługi w zakresie handlu detalicznego
+            artykułami nieżywnościowymi</div>
+        <div style="overflow-x: scroll; width: 100%">
+            <table style="width: 1100px; font-size: 24px;">
+                <tbody></tbody>
+            </table>
+        </div>
+        <br>
+        <br>
         <div style="color: white; font-size: 32px; font-style: normal;">Część I. Działalność usługowa oraz wytwórczo-usługowa</div>
         <div style="overflow-x: scroll; width: 100%">
             <table style="width: 1200px; font-size: 24px;">
@@ -184,7 +201,7 @@
     function showTable() {
         try {
             let selTable = document.getElementById("yearTable");
-            document.getElementsByTagName("table")[4].innerHTML = `<tr>
+            document.getElementsByTagName("table")[5].innerHTML = `<tr>
                 <th style="width: 400px; text-align: center;" rowspan="2">Zakres działalności</th>
                 <th style="width: 80px; text-align: center;" rowspan="2">Oznaczenie stawek</th>
                 <th style="width: 720px; text-align: center;" colspan="3">W miejscowości o liczbie mieszkańców<br>(wysokość stawek w złotych)</th>
@@ -335,7 +352,59 @@
                     <td style="text-align: center;">1820</td>
                 </tr>`;
 
-                let tableBody = document.getElementsByTagName("table")[4].getElementsByTagName("tbody")[0];
+                document.getElementsByTagName("table")[4].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th rowspan="3" colspan="2" style="width: 300px; text-align: left;">Działalność handlowa
+                        w zakresie sprzedaży
+                        detalicznej</th>
+                    <th colspan="6" style="width: 800px; text-align: center;">W miejscowości o liczbie mieszkańców
+                        (wysokość stawek w złotych)</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 200px; text-align: center;">Do 5000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Ponad 5000
+                        do 50 000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Powyżej 50 000</th>
+                </tr>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                </tr>
+                <tr>
+                    <td rowspan="3">artykułów
+                        nieżywnościowych</td>
+                    <td>0</td>
+                    <td style="text-align: center;">575</td>
+                    <td style="text-align: center;">1277</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">1459</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">2388</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: center;">634</td>
+                    <td style="text-align: center;">1459</td>
+                    <td style="text-align: center;">780</td>
+                    <td style="text-align: center;">2388</td>
+                    <td style="text-align: center;">997</td>
+                    <td style="text-align: center;">3540</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="text-align: center;">767</td>
+                    <td style="text-align: center;">1820</td>
+                    <td style="text-align: center;">1063</td>
+                    <td style="text-align: center;">3210</td>
+                    <td style="text-align: center;">1345</td>
+                    <td style="text-align: center;">4700</td>
+                </tr>`;
+
+                let tableBody = document.getElementsByTagName("table")[5].getElementsByTagName("tbody")[0];
                 let rowIndex = 0;
 
                 for (let i = 0; i < tableWyn.length; i++) {
@@ -502,7 +571,59 @@
                     <td style="text-align: center;">2062</td>
                 </tr>`;
 
-                let tableBody = document.getElementsByTagName("table")[4].getElementsByTagName("tbody")[0];
+                document.getElementsByTagName("table")[4].getElementsByTagName("tbody")[0].innerHTML = 
+                `<tr>
+                    <th rowspan="3" colspan="2" style="width: 300px; text-align: left;">Działalność handlowa
+                        w zakresie sprzedaży
+                        detalicznej</th>
+                    <th colspan="6" style="width: 800px; text-align: center;">W miejscowości o liczbie mieszkańców
+                        (wysokość stawek w złotych)</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style="width: 200px; text-align: center;">Do 5000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Ponad 5000
+                        do 50 000</th>
+                    <th colspan="2" style="width: 200px; text-align: center;">Powyżej 50 000</th>
+                </tr>
+                <tr>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                    <th style="width: 100px; text-align: center;">Od</th>
+                    <th style="width: 100px; text-align: center;">Do</th>
+                </tr>
+                <tr>
+                    <td rowspan="3">artykułów
+                        nieżywnościowych</td>
+                    <td>0</td>
+                    <td style="text-align: center;">651</td>
+                    <td style="text-align: center;">1446</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1653</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">2705</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td style="text-align: center;">718</td>
+                    <td style="text-align: center;">1653</td>
+                    <td style="text-align: center;">883</td>
+                    <td style="text-align: center;">2705</td>
+                    <td style="text-align: center;">1129</td>
+                    <td style="text-align: center;">4010</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td style="text-align: center;">869</td>
+                    <td style="text-align: center;">2062</td>
+                    <td style="text-align: center;">1204</td>
+                    <td style="text-align: center;">3636</td>
+                    <td style="text-align: center;">1523</td>
+                    <td style="text-align: center;">5325</td>
+                </tr>`;
+
+                let tableBody = document.getElementsByTagName("table")[5].getElementsByTagName("tbody")[0];
                 let rowIndex = 0;
 
                 for (let i = 0; i < tableWyn.length; i++) {

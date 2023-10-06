@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Karta podatkowa i Ryczałt</title>
+</head>
+<script src="data.js"></script>
+<style>
+    div {
+        overflow: -moz-scrollbars-none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    input#inputTableWyn:hover {
+        border: 0px;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: #f9f9f9;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+    }
+
+    .dropdown-content {
+        color: black;
+    }
+
+    div.elTableWyn {
+        padding: 6px 8px;
+        font-size: 20px;
+        cursor: pointer;
+        border-bottom: 1px solid #9e9e9e;
+    }
+
+    div.elTableWyn:hover {
+        background-color: #ddd;
+    }
+
+    #showResTableWyn, div.elTableWyn {
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none;   
+        -khtml-user-select: none;    
+        -moz-user-select: none;     
+        -ms-user-select: none;       
+        user-select: none;
+    }
+
+    td, th {
+        border: 1px solid black;
+    }
+</style>
+<body onload="loadTable(false)">
+    <header style="display: flex; justify-content: center; align-items: center; color: white; font-size: 38px;">
+        Obliczenia usług parkingowych
+    </header>
+    <main>
+        <div id="divYear" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Rok:</div>
+            <select oninput="changeWynBrutto()" id="yearTable" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px;">
+                <option>2022</option>
+                <option>2023</option>
+            </select>
+        </div>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Miesiąc:</div>
+            <select id="month" class="form-select mt-3" style="margin: 0px !important; width: 160px; cursor: pointer; font-size: 18px;">
+                <option>Styczeń</option>
+                <option>Luty</option>
+                <option>Marzec</option>
+                <option>Kwiecień</option>
+                <option>Maj</option>
+                <option>Czerwiec</option>
+                <option>Lipiec</option>
+                <option>Sierpień</option>
+                <option>Wrzesień</option>
+                <option>Pazdziernik</option>
+                <option>Listopad</option>
+                <option>Grudzień</option>
+            </select>
+        </div>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;" id="wynBrutto">Wynagrodzenie Brutto: 3010</div>
+        </div>
+        <br>
+        <div id="divStan" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Liczba stanowisk:</div>
+            <input oninput="getValue()" type="text" name="inputStan" id="inputStan" style="width: 100%; max-width: 160px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div id="divPrac" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Kwota:</div>
+            <input type="text" name="value" id="value" style="width: 100%; max-width: 240px; border: 0px; background-color: white; padding: 6px 8px; font-size: 20px;">
+        </div>
+        <br>
+        <div style="display: flex;">
+            <input type="button" style="margin-right: 24px; font-size: 24px; background-color: #4c84af; border: 0px; padding: 6px 24px; cursor: pointer; color: white;" value="Result" id="getResult" onclick="getResult()">
+            <a style="font-size: 24px; background-color: red; border: 0px; padding: 6px 24px; cursor: pointer; text-decoration: none; color: white;" href="KP.html">Back</a>
+        </div>
+    </main>
+</body>
+<script>
+    let year, month, stan, value;
+
+    function getValue() {
+        let stawki;
+        if (document.getElementById("inputStan").value < 0)
+            return;
+
+        if (document.getElementById("yearTable").value == 2022)
+            stawki = [7.7, 11.5, 13.7];
+        else
+            stawki = [8.7, 13, 15.5];
+
+        if (document.getElementById("inputStan").value <= 140)
+            document.getElementById("value").value = parseFloat(document.getElementById("inputStan").value * stawki[0] * 100) / 100;
+        else if (document.getElementById("inputStan").value > 140 && document.getElementById("inputStan").value <= 180)
+            document.getElementById("value").value = parseFloat(1218 + document.getElementById("inputStan").value - 140 * stawki[1] * 100) / 100;
+        else if (document.getElementById("inputStan").value > 180)
+            document.getElementById("value").value = parseFloat(1738 + document.getElementById("inputStan").value - 180 * stawki[2] * 100) / 100;
+    }
+
+    function getResult() {
+        try {
+            document.getElementById("brError").remove();
+            document.getElementById("error").remove();
+        }
+        catch {
+
+        }
+
+        try {
+            document.getElementById("brResTable").remove();
+            document.getElementById("brResTable").remove();
+            document.getElementById("resTable").remove();
+        }
+        catch {
+
+        }
+
+        try {
+            year = document.getElementById("yearTable").value.toString();
+            month = document.getElementById("month").value.toString();
+            stan = parseInt(document.getElementById("inputStan").value.toString());
+            value = parseFloat(document.getElementById("value").value.toString().replace(",", "."));
+
+            loadTable(true);
+
+            if (isNaN(stan) || !isFinite(stan)) {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych</span>`;
+                    return;
+            }
+            if (isNaN(value) || !isFinite(value)) {
+                document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych</span>`;
+                    return;
+            }
+
+            if (year == 2022) {
+                let sklzdr = Math.round(parseFloat(3010 * 0.09) * 100) / 100;
+                let min19 = Math.round(sklzdr * 0.19 * 100) / 100;
+
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `
+                <br id="brResTable">
+                <br id="brResTable">
+                <div id="resTable" style="overflow-x: scroll; width: 100%">
+                    <table style="width: 100%; max-width: 600px; font-size: 24px;">
+                        <tr>
+                            <th style="width: 100%; text-align: center !important;" colspan="2">Wysokość miesięcznej składki zdrowotnej zapłaconej w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center !important;">${month}: ${sklzdr}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center !important;" colspan="2">Wysokość miesięcznej składki zdrowotnej do odliczenia w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center !important;">${month}: ${min19}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center !important;" colspan="2">Miesięczna kwota podatku dochodowego do zapłaty w US</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center !important;">${month}: ${Math.round(value - min19)}</td>
+                        </tr>
+                    </table>
+                </div>`;
+            }
+            else {
+                let sklzdr;
+                
+                if (month == "Styczeń" || 
+                    month == "Luty" || 
+                    month == "Marzec" || 
+                    month == "Kwiecień" || 
+                    month == "Maj" || 
+                    month == "Czerwiec") {
+                    sklzdr = Math.round(parseFloat(3490 * 0.09) * 100) / 100;
+                }
+                else {
+                    sklzdr = Math.round(parseFloat(3600 * 0.09) * 100) / 100;
+                }
+
+                let min19 = Math.round(sklzdr * 0.19 * 100) / 100;
+
+                document.getElementsByTagName("main")[0].innerHTML += 
+                `
+                <br id="brResTable">
+                <br id="brResTable">
+                <div id="resTable" style="overflow-x: scroll; width: 100%">
+                    <table style="width: 100%; max-width: 600px; font-size: 24px;">
+                        <tr>
+                            <th style="width: 100%; text-align: center !important;" colspan="2">Wysokość miesięcznej składki zdrowotnej zapłaconej w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center !important;">${month}: ${sklzdr}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center !important;" colspan="2">Wysokość miesięcznej składki zdrowotnej do odliczenia w ${year}</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center !important;">${month}: ${min19}</td>
+                        </tr>
+                        <tr>
+                            <th style="width: 100%; text-align: center !important;" colspan="2">Miesięczna kwota podatku dochodowego do zapłaty w US</th>
+                        </tr>
+                        <tr>
+                            <td style="width: 50%; text-align: center !important;">${month}: ${Math.round(value - min19)}</td>
+                        </tr>
+                    </table>
+                </div>`;
+            }
+        }
+        catch {
+            document.getElementsByTagName("main")[0].innerHTML +=
+                    `<br id="brError">
+                    <span id="error" style="color: red; font-size: 16px;">Input error: Niedokładne wpisywanie danych</span>`;
+                    return;
+        }
+        finally {
+            loadTable(true);
+        }
+    }
+
+    function changeWynBrutto() {
+        let year = document.getElementById("yearTable").value;
+
+        if (year == 2022)
+            document.getElementById("wynBrutto").innerHTML = "Wynagrodzenie Brutto: 3010";
+        else
+            document.getElementById("wynBrutto").innerHTML = "Wynagrodzenie Brutto: 3490; 3600";
+    }
+
+    function loadTable(saveValues) {
+        if (saveValues) {
+            try {
+                document.getElementById("yearTable").value = year;
+                document.getElementById("month").value = month;
+                if (isNaN(stan) || !isFinite(stan))
+                    document.getElementById("inputStan").value = "";
+                else
+                    document.getElementById("inputStan").value = stan;
+                if (isNaN(value) || !isFinite(value))
+                    document.getElementById("value").value = "";
+                else
+                    document.getElementById("value").value = value;
+            }
+            catch {
+
+            }
+        }
+    }
+</script>
+</html>

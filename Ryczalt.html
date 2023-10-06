@@ -11,15 +11,11 @@
 <style>
     td, th {
         border: 1px solid black;
-    }
-
-    th {
         text-align: center;
     }
 
     td {
         color: black;
-        text-align: left;
         font-size: 20px;
     }
 
@@ -34,17 +30,23 @@
 <script src="data.js"></script>
 <body onload="showTable()">
     <header>
-        <div class="icons">
-            <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
-            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">menu</i>
-        </div>
-        <div class="listHeader" id="listHeader">
-            <a class="elList" href="ObZaRok.html">Obliczenia za cały rok</a>
-            <a class="elList" href="ObZaM.html">Obliczenia za miesiąc</a>
-        </div>
+        <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
     </header>
     <main>
         <div style="font-size: 20px; font-style: normal; color: #04AA6D;">Te wszystkie informacji będą się zmieniać co roku</span>
+        <br>
+        <br>
+        <div style="color: white; font-size: 48px; width: 100%; font-weight: bold;">Ryczałt od przychodów ewidencjonowanych</div>
+        <br>
+        <br>
+        <a href="oblRyczalt.html" 
+        style="background-color: #4c84af; 
+        color: white; 
+        font-size: 32px; 
+        padding: 16px 48px;
+        cursor: pointer; text-decoration: none;">Obliczenie ryczłtu</a>
+        <br>
+        <br>
         <br>
         <br>
         <div style="color: white; font-size: 24px; font-style: normal;">
@@ -97,14 +99,16 @@
                 </div>
             </div>
             <br>
-            <table style="width: 1000px; font-size: 24px;">
-                <tr>
-                    <th style="width: 100px; text-align: center;">Stawka podatku</th>
-                    <th style="width: 900px; text-align: center;">Przykłady przychodów opodatkowanych ryczałtem</th>
-                </tr>
-                <tbody>
-
-                </tbody>
+        </div>
+        <div style="width: 100%; overflow-x: scroll;">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="text-align: center;">Stawka podatku</th>
+                        <th>Przykłady przychodów opodatkowanych ryczałtem</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
             </table>
         </div>
     </main>
@@ -116,13 +120,13 @@
                 document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
                 `<tr>
                     <td rowspan="${tableRycz[i].length}">${tableRyczStawki[i]}%</td>
-                    <td>${tableRycz[i][0]}</td>    
+                    <td style="text-align: left;">${tableRycz[i][0]}</td>    
                 </tr>`;
 
                 for (let j = 1; j < tableRycz[i].length; j++) {
                     document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
                     `<tr>
-                        <td>${tableRycz[i][j]}</td>    
+                        <td style="text-align: left;">${tableRycz[i][j]}</td>    
                     </tr>`;
                 }
             }
