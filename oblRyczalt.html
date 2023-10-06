@@ -98,6 +98,14 @@
         Obliczenia ryczałtu
     </header>
     <main>
+        <a href="Ryczalt.html" 
+        style="cursor: pointer; color: white;  width: 100%; max-width: 280px; border: 0px; 
+            background-color: red; 
+            padding: 8px 24px; 
+            text-decoration: none;
+            font-size: 24px; text-align: center;">Back</a>
+        <br>
+        <br>
         <div style="display: flex; flex-direction: column; color: white; font-size: 24px;">
             <div style="margin-bottom: 16px; font-size: 24px;">Sposób odliczenia ZUS:</div>
             <select oninput="showVariant()" id="variants" class="form-select mt-3" style="margin: 0px !important; width: 100%; max-width: 760px; cursor: pointer; font-size: 20px;">
@@ -185,7 +193,7 @@
             <div id="btnZUSes" style="display: flex; flex-direction: row;">
                 <input value="Clear Data" onclick="clearDataZUS()" type="button" name="clearDataZUS" id="clearDataZUS" 
                 style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
-                    background-color: rgb(0, 0, 120); 
+                    background-color: red !important;
                     padding: 8px 12px; 
                     font-size: 24px; text-align: center; margin-right: 16px;">
                 <input value="ZUS Result Auto" onclick="getZUSAutoResult()" type="button" name="getZUSAutoResult" id="getZUSAutoResult" 
@@ -195,10 +203,11 @@
                                 font-size: 24px; text-align: center; margin-right: 16px;">
                 <input value="ZUS Result" onclick="getZUSResult()" type="button" name="getZUSResult" id="getZUSResult" 
                 style="cursor: pointer; color: white;  width: 100%; max-width: 240px; border: 0px; 
-                    background-color: green; 
+                    background-color: purple; 
                     padding: 8px 12px; 
                     font-size: 24px; text-align: center;">
             </div>
+            <br>
             <br>
         </div>
         <div id="SecondVariant" style="display: block;">
@@ -335,7 +344,7 @@
                 try {
                     let procent = parseFloat(Math.round(parseFloat(resValue / sumValues) * 100) / 100);
                     arrRes.push(procent);
-                    let value = parseFloat(Math.round(parseFloat((ZUS * procent) * 100)) / 100);
+                    let value = parseFloat(Math.round(parseFloat((ZUS * procent) * 10000 / 100)) / 100);
                     arrRes.push(value);
                 }
                 catch {
