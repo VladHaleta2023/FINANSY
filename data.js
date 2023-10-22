@@ -373,3 +373,55 @@ let handDetPrices2023 = [[[[467, 718], [651, 883], [718, 1129]],
 
 let inneUslugi2022 = [[2270, 3792], [3035, 4551], [3792, 5313]];
 let inneUslugi2023 = [[2571, 4296], [3438, 5156], [4296, 6019]];
+
+let przedmiotOpodNier = [
+    ["związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków",
+    "pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych",
+    "gruntów pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego",
+    "niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym"],
+    ["mieszkalnych", 
+    "związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej",
+    "zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym",
+    "związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń",
+    "budynków pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego"],
+    ["mosty", "lotniska", "tunele", "wiadukty", "estakady",
+    "tablice reklamowe",
+    "stacje uzdatniania wody",
+    "oczyszczalnie ścieków",
+    "budowle sportowe",
+    "zbiorniki",
+    "sieci uzbrojenia terenu",
+    "przyłacza techniczne",
+    "parking"]
+];
+
+let stawkiPodNier2022 = [
+    [1.03, 0.000517, 0.54, 3.4],
+    [0.89, 25.74, 12.04, 5.25, 8.68]
+];
+
+let stawkiPodNier2023 = [
+    [1.16, 0.000579, 0.61, 3.81],
+    [1, 28.78, 13.47, 5.87, 9.71]
+];
+
+let PCCprzedmiotOpod = [["Umowa sprzedaży", 
+["nieruchomości", 
+"rzeczy ruchome", 
+"prawa użytkowania wieczystego", 
+"własnościowe lub spółdzielcze prawa do lokalu mieszkalnego",
+"inne prawa majątkowe",
+"sprzedaż, której przedmiotem jest prawo własności lokalu mieszkalnego, stanowiącego odrębną nieruchomość, prawo własności budynku mieszkalnego jednorodzinnego, spółdzielcze własnościowe prawo do lokalu dotyczące lokalu mieszkalnego albo domu jednorodzinnego, jeżeli kupującym jest osoba fizyczna lub osoby fizyczne, którym w dniu sprzedaży i przed tym dniem nie przysługiwało żadne z tych praw ani udział w tych prawach, chyba że udział ten nie przekracza lub nie przekraczał 50% i został nabyty w drodze dziedziczenia",
+"kupujący nabywa co najmniej sześć lokali mieszkalnych stanowiących odrębne nieruchomości w jednym lub kilku budynkach wybudowanych na jednej nieruchomości gruntowej, opodatkowanych podatkiem od towarów i usług, lub udziały w tych lokalach albo nabył już co najmniej pięć takich lokali lub udziały w nich, od zawartej z tym samym kupującym umowy sprzedaży szóstego i każdego następnego takiego lokalu w tym budynku lub budynkach lub udziału w takim lokalu"]], 
+    ["Umowa zaminay", ["Umowa zaminay"]], ["Umowa darowizny", ["Umowa darowizny"]], ["Umowa dożywocia", ["Umowa dożywocia"]], 
+    ["Umowa o dział spadku lub zniesienie współwłasności", ["Umowa o dział spadku lub zniesienie współwłasności"]],
+    ["Ustanowienie hipoteki", ["zabezpieczenie wierzytelności istniejących", "zabezpieczenie wierzytelności o wysokości nieustalonej"]],
+    ["Umowa spółki", ["zawarcie umowy", "wniesienie lub podwyższenie wkładów do spółki osobowej albo podwyższenie kapitału zakładowego",
+    "dopłaty", "pożyczka"]],
+    ["Odpłatne użytkowanie, w tym nieprawidłowe oraz odpłatna służebności", ["Odpłatne użytkowanie, w tym nieprawidłowe oraz odpłatna służebności"]],
+    ["Depozyt nieprawidłowy", ["Depozyt nieprawidłowy"]],
+    ["Czynności nieujawnione", ["Czynności nieujawnione"]],
+    ["Inne", ["Inne"]]];
+
+let PCCStawki = [[[2, '%'], [1, '%'], [undefined, '%'], [6, '%']], [[2, '%']], [[2, '%']], [[2, '%']], [[2, '%']], 
+[[0.1, '%'], [19, 'zł']], [[0.5, '%']], [[1, '%']], [[0.5, '%']], [[20, '%']], [[undefined, '%']]];

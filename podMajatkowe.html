@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <title>FINANSY</title>
+</head>
+<style>
+    div#tableDivShow, div#tableDivNier, div#tablePCC, div#tableOplLok {
+        display: flex;
+        justify-content: center;
+        overflow-x: scroll; 
+        width: 100%;
+    }
+
+    div {
+        overflow: -moz-scrollbars-none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    td, th {
+        text-align: start;
+        vertical-align: baseline;
+    }
+
+    .elementHowTh {
+        padding: 4px 12px; color: white; background-color: #04AA6D; border: 1px solid black;
+        font-weight: bold;
+    }
+
+    .elementHowTd {
+        padding: 4px 12px; color: black; background-color: white; border: 1px solid black;
+    }
+
+    .elementHowTable {
+        width: 100%; display: flex; justify-content: center; align-items: center; flex-direction: column;
+    }
+
+    .elementHowtr {
+        width: 100%; max-width: 1000px; font-size: 24px;
+    }
+</style>
+<body>
+    <header>
+        <div class="icons">
+            <a href="index.html" style="text-decoration: none;"><i class="material-icons Exit">keyboard_return</i></a>
+            <i class="material-icons Menu" onclick="showMenu()" id="iMenu">menu</i>
+        </div>
+        <div class="listHeader" id="listHeader">
+            <a class="elList" href="oblPodOdNier.html">Obliczenia podatku od nieruchomości</a>
+            <a class="elList" href="oblPCC.html">Obliczenia podatku od PCC</a>
+            <a class="elList" href="oblOplLok.html">Obliczenia opłat lokalnych</a>
+        </div>
+    </header>
+    <main style="text-align: center;">
+        <h1 style="color: white;">2. PODATKI MAJĄTKOWE I OPŁATY LOKALNE</h1>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            Podstawy nakładania obowiązków podatkowych w Polsce są określone w art. 217 Konstytucji Rzeczypospolitej Polskiej z dnia
+            2 kwietnia 1997r. Ogólne prawo podatkowe oraz związane z nim obowiązki i procedury regulujące ustawa z dnia 29 sierpnia
+            1997r., to jest Ordynacja podatkowa (Dz.U. z 2022 r. poz. 1325).
+        </div>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal;">Tabela aktów prawnych regulujących podatki majątkowe i opłaty lokalne</div>
+        <div id="tableDivShow" style="width: 100%">
+            <table style="width: 1000px;">
+                <tr>
+                    <th style="width: 200px; text-align: center; vertical-align: middle;">Zakres prawa podatkowego</th>
+                    <th style="width: 600px; text-align: center; vertical-align: middle;">Akty regulujące</th>
+                    <th style="width: 200px; text-align: center; vertical-align: middle;">Organ podatkowy</th>
+                </tr>
+                <tr>
+                    <td>Podatek rolny</td>
+                    <td>Ustawa z dnia 15 listopada 1984 r. o podatku rolnym (Dz.U. z 2022 r. poz. 333)</td>
+                    <td rowspan="5" style="text-align: center; vertical-align: middle;">wójt (burmistrz, prezydent miasta)</td>
+                </tr>
+                <tr>
+                    <td>Podatek leśny</td>
+                    <td>Ustawa z dnia 30 pazdziernika 2002 r. o podatlu leśnym (Dz.U. z 2019 r. poz. 888)</td>
+                </tr>
+                <tr>
+                    <td>Podatek od nieruchomości</td>
+                    <td rowspan="3">Ustawa z dnia 12 stycznia 1991 r. o podatkach i opłatach lokalnych (Dz. U. z 2019 r, poz. 1170).<br><br>Uchwały Rady Gminy</td>
+                </tr>
+                <tr>
+                    <td>Podatek od środków transportowych</td>
+                </tr>
+                <tr>
+                    <td>Opłaty lokalne</td>
+                </tr>
+                <tr>
+                    <td>Podatek od spadków i darowizn</td>
+                    <td>Ustawa z dnia 28 lipca 1983 r. o podatkach od spadków i darowizn (Dz.U. 2019 r. poz. 1813)</td>
+                    <td rowspan="2" style="text-align: center; vertical-align: middle;">naczelnik urzędu skarbowego</td>
+                </tr>
+                <tr>
+                    <td>Podatek od czynności cywilnoprawnych</td>
+                    <td>Ustawa z dnia 9 września 2000 r. o podatku od czynności publicznoprawnych (Dz.U. 2022 poz. 815)</td>
+                </tr>
+            </table>
+        </div>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek rolny</div>
+        <div style="font-size: 24px; color: white;">
+            Opodatkowaniu <span style="font-weight: bold;">podatkiem rolnym</span> podlegają grunty sklasyfikowane w ewidencji gruntów i
+            budynków jako użytki rolne lub jako grunty zadrzewione i zakrzewione na użytkach rolnych, z wyjątkiem gruntów zajętych na
+            prowadzenie działalności gospodarczej innej niż działalność rolnicza.
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek leśny</div>
+        <div style="font-size: 24px; color: white;">
+            Opodatkowaniu <span style="font-weight: bold;">podatkiem leśnym</span> podlegają lasy, z wyjątkiem lasów zajętych na wykonywanie
+            innej działalności gospodarczej niż działalność leśna. Podstawę opodatkowania podatkiem leśnym stanowi powierzchnia lasu, wyrażona
+            w hektarach, wynikająca z ewidencji gruntów i budynków.
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek od nieruchomości</div>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Podatkiem od nieruchomości</span> są opodatkowane nasyępujące nieruchomości lub obiekty
+            budowlane:<br>1) grunty,<br>2) budynki lub ich części,<br>3) budowle lub ich części związane z prowadzeniem działalności gospodarczej.
+        </div>
+        <br>
+        <br>
+        <div style="display: flex; flex-direction: row; align-items: center; justify-content: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;">Tabela za rok:</div>
+            <select onchange="showTable()" id="yearTable" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; padding: 4px !important; font-size: 20px;">
+                <option>2022</option>
+                <option>2023</option>
+            </select>
+        </div>
+        <br>
+        <a target="_blank" id="pdfDownload" style="color: white; font-size: 24px; text-decoration: none; padding: 8px 16px; background-color:brown;" href="https://www.podatki.gov.pl/media/8502/wysoko%C5%9B%C4%87-stawek-w-opodatkowaniu-nieruchomo%C5%9Bci-w-2022-r.pdf">Show in PDF</a>
+        <br>
+        <br>
+        <div id="nameTableNier" style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Tabela maksymalnych stawek podatku od nieruchomości w 2022</div>
+        <br>
+        <div id="tableDivNier" style="width: 100%">
+            <table style="width: 1000px;" id="tableNier">
+                <tr>
+                    <th colspan="2">Przedmiot opodatkowania</th>
+                    <th>Maksymalne stawki podatku</th>
+                    <th>Podstawa opodatkowania</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td rowspan="4" style="font-weight: bold; text-align: center; vertical-align: middle;">Od gruntów</td>
+                        <td>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</td>
+                        <td>1,03 zł od 1 m<sup>2</sup> powierzchni</td>
+                        <td rowspan="4" style="text-align: center; vertical-align: middle;">powierzchnia tych gruntów</td>
+                    </tr>
+                    <tr>
+                        <td>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</td>
+                        <td>5.17 zł od 1 ha powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td>pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</td>
+                        <td>0,54 zł od 1 m<sup>2</sup> powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</td>
+                        <td>3,40 zł od 1 m<sup>2</sup> powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5" style="font-weight: bold; text-align: center; vertical-align: middle;">Od budynków lub ich części</td>
+                        <td>mieszkalnych</td>
+                        <td>0,89 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                        <td rowspan="5" style="text-align: center; vertical-align: middle;">powierzchnia użytkowa, czyli powierzchnia pomieszczeń lub ich części oraz część kondygnacji o wysokości w świetle od 1,40 m do 2,20 m zalicza się do powierzchni użytkowej w 50%, a jeżeli wysokośc jest mnijsza niż 1,40 m, powierzchnię tę się pomija</td>
+                    </tr>
+                    <tr>
+                        <td>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</td>
+                        <td>25,74 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</td>
+                        <td>12.04 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</td>
+                        <td>5,25 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</td>
+                        <td>8,68 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; text-align: center; vertical-align: middle;">Od budowli</td>
+                        <td>zgodnie z prawem budowle to m.in.:<br>
+                        - mosty, lotniska, tunele, wiadukty, estakady,<br>
+                        - tablice reklamowe wolno stojące, które są "trwale związane z gruntem",<br>
+                        - stacje uzdatniania wody,<br>
+                        - oczyszczalnie ścieków,<br>
+                        - budowle sportowe,<br>
+                        - zbiorniki,<br>
+                        - sieci uzbrojenia terenu,<br>
+                        - przyłacza techniczne,<br>
+                        - parking.</td>
+                        <td>2% ich wartości</td>
+                        <td>koszt budowu lub nabycia danej budowli</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek od nieruchomości płatny jest:</div>
+        <div style="font-size: 24px; color: white;">
+            1. Przez osoby fizyczne - w terminach: do dnia 15 marca, 15 maja, 15 września i 15 listopada każdego roku podatkowego. Formularz IN-1 - musi złożyć w terminie 14 dni od dnia wystawienia.<br>
+            2. Przez osoby prawne - w terminie do dnia 15 każdego miesiąca, a za styczeń do dnia 31 stycznia roku podatkowego lub w trakcie 14 dni od dnia złożenia deklaracki DN-1.
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek od środków transportowych</div>
+        <div style="font-size: 24px; color: white;">
+            Opodatkowaniu <span style="font-weight: bold;">podatkiem od srodków transportowych</span> podlegają m.in. samochody
+            ciężarowe o dopuszczalnej masie całkowitej powyżej 3,5 tony i poniżej 12 ton oraz te o dopuszczalnej masie całkowitej równej
+            lub wyższej niż 12 ton.
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek od spadków i darowizn</div>
+        <div style="font-size: 24px; color: white;">
+            Podatkowi <span style="font-weight: bold;">od spadków i darowizn</span> podlega nabycie przez osoby fizyczne własności
+            rzeczy lub praw majątkowych tytełem:<br>
+            1) dziedziczenia,<br>2) darowizny<br>3) zasiedlenia<br>4) nieodpłatnego zniesienia współwłasności,<br>
+            5) zachowu<br>6) nieodpłatnej
+        </div>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Podatek od czynności cywilnoprawnych</div>
+        <div id="tablePCC" style="width: 100%">
+            <table style="width: 1000px;" id="tablePCC">
+                <tr>
+                    <th colspan="2">Przedmiot opodatkowania</th>
+                    <th>Stawka podatku</th>
+                    <th>Podstawa opodatkowania</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td rowspan="4" style="width: 200px;">Umowa sprzedaży</td>
+                        <td style="width: 500px;">nieruchomości, rzeczy ruchomych, prawa użytkowania wieczystego, własnościowego spółdzielczego prawa do lokalu mieszkalnego, spółdzielczego prawa do lokalu użytkowego</td>
+                        <td style="width: 100px;" style="text-align: center; vertical-align: middle;">2%</td>
+                        <td style="width: 200px;" rowspan="4">wartość rynkowa rzeczy lub prawa majątkowego</td>
+                    </tr>
+                    <tr>
+                        <td>sprzedaż, której przedmiotem jest prawo własności lokalu mieszkalnego, stanowiącego odrębną nieruchomość, prawo własności budynku mieszkalnego jednorodzinnego, spółdzielcze własnościowe prawo do lokalu dotyczące lokalu mieszkalnego albo domu jednorodzinnego, jeżeli kupującym jest osoba fizyczna lub osoby fizyczne, którym w dniu sprzedaży i przed tym dniem nie przysługiwało żadne z tych praw ani udział w tych prawach, chyba że udział ten nie przekracza lub nie przekraczał 50% i został nabyty w drodze dziedziczenia.</td>
+                        <td>zwolniona z PCC</td>
+                    </tr>
+                    <tr>
+                        <td>kupujący nabywa co najmniej sześć lokali mieszkalnych stanowiących odrębne nieruchomości w jednym lub kilku budynkach wybudowanych na jednej nieruchomości gruntowej, opodatkowanych podatkiem od towarów i usług, lub udziały w tych lokalach albo nabył już co najmniej pięć takich lokali lub udziały w nich, od zawartej z tym samym kupującym umowy sprzedaży szóstego i każdego następnego takiego lokalu w tym budynku lub budynkach lub udziału w takim lokalu</td>
+                        <td>6%</td>
+                    </tr>
+                    <tr>
+                        <td>inne prawa majątkowe, np. sprzedaż akcji</td>
+                        <td>1%</td>
+                    </tr>
+                    <tr>
+                        <td>Umowa zamiany</td>
+                        <td>lokalu mieszkalnego stanowiącego odrębną nieruchomości lub własnościowego spółdzielczego prawa do lokalu mieszkalnego na taki lokal lub prawo do lokalu</td>
+                        <td style="text-align: center; vertical-align: middle;">2%</td>
+                        <td>różnica wartości rynkowych zamienianych lokali lub praw do lokali</td>
+                    </tr>
+                    <tr>
+                        <td>Umowa darowizny</td>
+                        <td>lokalu mieszkalnego stanowiącego odrębną nieruchomości lub własnościowego spółdzielczego prawa do lokalu mieszkalnego na taki lokal lub prawo do lokalu</td>
+                        <td style="text-align: center; vertical-align: middle;">2%</td>
+                        <td>wartość długów i ciężarów lub zabowiązań przejętych przez obdarowanego</td>
+                    </tr>
+                    <tr>
+                        <td>Umowa dożywocia</td>
+                        <td>lokalu mieszkalnego stanowiącego odrębną nieruchomości lub własnościowego spółdzielczego prawa do lokalu mieszkalnego na taki lokal lub prawo do lokalu</td>
+                        <td style="text-align: center; vertical-align: middle;">2%</td>
+                        <td>wartość rynkowa nieruchomości lub prawa użytkowania wieczystego</td>
+                    </tr>
+                    <tr>
+                        <td>Umowa o dział spadku lub o zniesienie współwłasności</td>
+                        <td>lokalu mieszkalnego stanowiącego odrębną nieruchomości lub własnościowego spółdzielczego prawa do lokalu mieszkalnego na taki lokal lub prawo do lokalu</td>
+                        <td style="text-align: center; vertical-align: middle;">2%</td>
+                        <td>wartość rynkowa nieruchomości lub prawa użytkowanego nabytego ponad wartość udziału we współwłasności lub spadku</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Ustanowienie hipoteki</td>
+                        <td>zabezpieczenie wierzytelności istniejących</td>
+                        <td style="text-align: center; vertical-align: middle;">0,1%</td>
+                        <td rowspan="2">kwota zabezpieczonej wierzytelności</td>
+                    </tr>
+                    <tr>
+                        <td>zabezpieczenie wierzytelności o wysokości nieustalonej</td>
+                        <td style="text-align: center; vertical-align: middle;">19,00 zł</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4">Umowa spółki</td>
+                        <td>zawarcie umowy</td>
+                        <td rowspan="4" style="text-align: center; vertical-align: middle;">0,5%</td>
+                        <td>wartość wkładów do spółki osobowej albo wartość kapitału zakładowego</td>
+                    </tr>
+                    <tr>
+                        <td>wniesienie lub podwyższenie wkładów do spółki osobowej albo podwyższenie kapitału zakładowego</td>
+                        <td>wartość wkładów powiększających majątek spółki osobowej albo wartość, o którą podwyższono kapitał zakładowy</td>
+                    </tr>
+                    <tr>
+                        <td>dopłaty</td>
+                        <td>kwota dopłat</td>
+                    </tr>
+                    <tr>
+                        <td>pożyczka udzielona spółce przez wspólnika</td>
+                        <td>kwota lub wartość pożyczki</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Odpłatne użytkowanie, w tym nieprawidłowe oraz odpłatna służebności</td>
+                        <td colspan="2" style="text-align: center; vertical-align: middle;">1%</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Depozyt nieprawidłowy</td>
+                        <td colspan="2" style="text-align: center; vertical-align: middle;">0,5%</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">Czynności nieujawnione</td>
+                        <td colspan="2" style="text-align: center; vertical-align: middle;">20%</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Ustawa o PCC</span> zawiera szereg zwolnień:
+            <br>
+            1) <span style="font-weight: bold;">Podmiotowych</span> (np. podatku nie płacą jednostki samorządu terytorialnego oraz osoby
+            nabywające na własne potrzeby sprzęt rehabilitacyjny lub wózki inwalidzkie)<br>
+            2) <span style="font-weight: bold;">Przedmiotowych</span> (np. sprzedaż towarów giełdowych na giełdach towarowych, walut obcych, rzeczy ruchomych,
+            jeżeli podstawa opodatkowania nie przekracza 1000,00 zł)<br>
+            Podatnicy w terminie 14 dni od dnia powstania obowiązku podatkowego, czyli od dnia dokonania czynności cywilnoprawnej, są obowiązani do złożenia
+            deklaracji PCC-3.
+        </div>
+        <br>
+        <br>
+        <br>
+        <div style="color: white; font-size: 32px; font-style: normal; font-weight: bold;">Opłaty Lokalne</div>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Opłaty lokalne</span>, podobnie jak podatki, są świadczeniem pieniężnym, przymusowym i
+            bezzwrotnym, czyli są to daniny publiczne o charakterze pozapodatkowym.
+        </div>
+        <br>
+        <a target="_blank" id="pdfDownload" style="color: white; font-size: 24px; text-decoration: none; padding: 8px 16px; background-color:brown;" href="Opłaty Lokalne.pdf">Show in PDF</a>
+        <br>
+        <br>
+        <div id="tableOplLok" style="width: 100%;">
+            <table style="width: 1000px;" id="tableOplLok">
+                <tr>
+                    <th style="width: 600px" colspan="2">Rodzaj opłaty lokalnej</th>
+                    <th style="width: 200px">Stawki 2022</th>
+                    <th style="width: 200px">Stawki 2023</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td colspan="2">Opłata Targowa</td>
+                        <td>823,11 zł dziennie</td>
+                        <td>852,75 zł dziennie</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Opłata Miejscowa</td>
+                        <td>
+                            w miejscowościach posiadających korzystne właściwości klimatyczne, walory krajobrazowe oraz warunki umożliwiające pobyt osób w tych celach
+                        </td>
+                        <td>2,41 zł dziennie</td>
+                        <td>2,50 zł dziennie</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            w miejscowościach posiadających status obszaru ochrony uzdrowiskowej
+                        </td>
+                        <td>3,39 zł dziennie</td>
+                        <td>3,52 zł dziennie</td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            Opłata Uzdrowiskowa
+                        </td>
+                        <td>4,66 zł dziennie</td>
+                        <td>4,83 zł dziennie</td>
+                    </tr>
+                    <tr>
+                        <td  colspan="2">
+                            Opłata od posiadania psów
+                        </td>
+                        <td>	
+                            130,30 zł rocznie od jednego psa
+                        </td>
+                        <td>135,00 zł rocznie od jednego psa</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">Opłata Reklamowa</td>
+                        <td>Część stała</td>
+                        <td>2,70 zł dziennie</td>
+                        <td>2,80 zł dziennie</td>
+                    </tr>
+                    <tr>
+                        <td>Część zmienna</td>
+                        <td>0,24 zł od 1m2</td>
+                        <td>0,25 zł od 1m2</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Opłata targowa</span> pobiera się od osób fizycznych, osób prawnych oraz jednostek
+            organizacyjnych nieposiadających osobowości prawnej, dokonujących sprzedaży na tagowiskach.
+        </div>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Opłata uzdrowiskowa</span> pobierana jest od osób fizycznych przebywających dłużej niż dobę
+            w celach zdrowotnych, turystycznych, wypoczynkowych lub szkoleniowych w miejscowościach znajdujących się na obszarach, którym
+            nadano status uzdrowiska.
+        </div>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Opłata miejscowa</span> pobierana jest od osób fizycznych, przebywających dłużej niż dobę
+            w celach turystycznych, wypoczynkowych lub szkoleniowych w miejscowościach.
+        </div>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Opłata od posiadania psów</span> pobierana jest od osób fizycznych posiadających psa.
+        </div>
+        <br>
+        <div style="font-size: 24px; color: white;">
+            <span style="font-weight: bold;">Opłata reklamowa</span> - rada gminy może wprowadzić opłatę reklamową od umieszczonych
+            tablic lub urządzeń reklamowych.
+        </div>
+    </main>
+</body>
+<script>
+    function showMenu() {
+        if (document.getElementById("iMenu").innerHTML == "menu") {
+            document.getElementById("iMenu").innerHTML = "close";
+            document.getElementById("listHeader").style.display = "flex";
+        }
+        else {
+            document.getElementById("iMenu").innerHTML = "menu";
+            document.getElementById("listHeader").style.display = "none";
+        }
+    }
+
+    function showTable() {
+         let year = document.getElementById("yearTable").value;
+
+         if (year == 2022) {
+            document.getElementById("nameTableNier").innerHTML = 'Tabela maksymalnych stawek podatku od nieruchomości w 2022';
+            document.getElementById("pdfDownload").setAttribute("href", "https://www.podatki.gov.pl/media/8502/wysoko%C5%9B%C4%87-stawek-w-opodatkowaniu-nieruchomo%C5%9Bci-w-2022-r.pdf");
+
+            document.getElementById("tableDivNier").innerHTML =
+            `<table style="width: 1000px;" id="tableNier">
+                <tr>
+                    <th colspan="2">Przedmiot opodatkowania</th>
+                    <th>Maksymalne stawki podatku</th>
+                    <th>Podstawa opodatkowania</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td rowspan="4" style="font-weight: bold; text-align: center; vertical-align: middle;">Od gruntów</td>
+                        <td>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</td>
+                        <td>1,03 zł od 1 m<sup>2</sup> powierzchni</td>
+                        <td rowspan="4" style="text-align: center; vertical-align: middle;">powierzchnia tych gruntów</td>
+                    </tr>
+                    <tr>
+                        <td>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</td>
+                        <td>5.17 zł od 1 ha powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td>pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</td>
+                        <td>0,54 zł od 1 m<sup>2</sup> powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</td>
+                        <td>3,40 zł od 1 m<sup>2</sup> powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5" style="font-weight: bold; text-align: center; vertical-align: middle;">Od budynków lub ich części</td>
+                        <td>mieszkalnych</td>
+                        <td>0,89 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                        <td rowspan="5" style="text-align: center; vertical-align: middle;">powierzchnia użytkowa, czyli powierzchnia pomieszczeń lub ich części oraz część kondygnacji o wysokości w świetle od 1,40 m do 2,20 m zalicza się do powierzchni użytkowej w 50%, a jeżeli wysokośc jest mnijsza niż 1,40 m, powierzchnię tę się pomija</td>
+                    </tr>
+                    <tr>
+                        <td>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</td>
+                        <td>25,74 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</td>
+                        <td>12.04 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</td>
+                        <td>5,25 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</td>
+                        <td>8,68 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; text-align: center; vertical-align: middle;">Od budowli</td>
+                        <td>zgodnie z prawem budowle to m.in.:<br>
+                        - mosty, lotniska, tunele, wiadukty, estakady,<br>
+                        - tablice reklamowe wolno stojące, które są "trwale związane z gruntem",<br>
+                        - stacje uzdatniania wody,<br>
+                        - oczyszczalnie ścieków,<br>
+                        - budowle sportowe,<br>
+                        - zbiorniki,<br>
+                        - sieci uzbrojenia terenu,<br>
+                        - przyłacza techniczne,<br>
+                        - parking.</td>
+                        <td>2% ich wartości</td>
+                        <td>koszt budowu lub nabycia danej budowli</td>
+                    </tr>
+                </tbody>
+            </table>`;
+         
+            
+        }
+         else {
+            document.getElementById("nameTableNier").innerHTML = 'Tabela maksymalnych stawek podatku od nieruchomości w 2023';
+            document.getElementById("pdfDownload").setAttribute("href", "https://www.podatki.gov.pl/media/9550/wysoko%C5%9B%C4%87-stawek-w-opodatkowaniu-nieruchomo%C5%9Bci-w-2023-r.pdf");
+
+            document.getElementById("tableDivNier").innerHTML =
+            `<table style="width: 1000px;" id="tableNier">
+                <tr>
+                    <th colspan="2">Przedmiot opodatkowania</th>
+                    <th>Maksymalne stawki podatku</th>
+                    <th>Podstawa opodatkowania</th>
+                </tr>
+                <tbody>
+                    <tr>
+                        <td rowspan="4" style="font-weight: bold; text-align: center; vertical-align: middle;">Od gruntów</td>
+                        <td>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</td>
+                        <td>1,16 zł od 1 m<sup>2</sup> powierzchni</td>
+                        <td rowspan="4" style="text-align: center; vertical-align: middle;">powierzchnia tych gruntów</td>
+                    </tr>
+                    <tr>
+                        <td>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</td>
+                        <td>5,79 zł od 1 ha powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td>pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</td>
+                        <td>0,61 zł od 1 m<sup>2</sup> powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</td>
+                        <td>3,81 zł od 1 m<sup>2</sup> powierzchni</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="5" style="font-weight: bold; text-align: center; vertical-align: middle;">Od budynków lub ich części</td>
+                        <td>mieszkalnych</td>
+                        <td>1,00 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                        <td rowspan="5" style="text-align: center; vertical-align: middle;">powierzchnia użytkowa, czyli powierzchnia pomieszczeń lub ich części oraz część kondygnacji o wysokości w świetle od 1,40 m do 2,20 m zalicza się do powierzchni użytkowej w 50%, a jeżeli wysokośc jest mnijsza niż 1,40 m, powierzchnię tę się pomija</td>
+                    </tr>
+                    <tr>
+                        <td>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</td>
+                        <td>28,78 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</td>
+                        <td>13,47 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</td>
+                        <td>5,87 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td>pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</td>
+                        <td>9,71 zł od 1 m<sup>2</sup> powierzchni użytkowej</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight: bold; text-align: center; vertical-align: middle;">Od budowli</td>
+                        <td>zgodnie z prawem budowle to m.in.:<br>
+                        - mosty, lotniska, tunele, wiadukty, estakady,<br>
+                        - tablice reklamowe wolno stojące, które są "trwale związane z gruntem",<br>
+                        - stacje uzdatniania wody,<br>
+                        - oczyszczalnie ścieków,<br>
+                        - budowle sportowe,<br>
+                        - zbiorniki,<br>
+                        - sieci uzbrojenia terenu,<br>
+                        - przyłacza techniczne,<br>
+                        - parking.</td>
+                        <td>2% ich wartości</td>
+                        <td>koszt budowu lub nabycia danej budowli</td>
+                    </tr>
+                </tbody>
+            </table>`;
+        
+            
+        }
+    }
+
+    function showMenu() {
+        if (document.getElementById("iMenu").innerHTML == "menu") {
+            document.getElementById("iMenu").innerHTML = "close";
+            document.getElementById("listHeader").style.display = "flex";
+        }
+        else {
+            document.getElementById("iMenu").innerHTML = "menu";
+            document.getElementById("listHeader").style.display = "none";
+        }
+    }
+</script>
+</html>

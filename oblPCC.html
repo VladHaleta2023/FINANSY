@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>FINANSY</title>
+</head>
+<style>
+    td, th {
+        border: 1px solid black !important;
+        vertical-align: top !important;
+        text-align: center !important;
+    }
+
+    th {
+        vertical-align: middle !important;
+    }
+
+    div {
+        overflow: -moz-scrollbars-none;
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none;   
+        -khtml-user-select: none;    
+        -moz-user-select: none;     
+        -ms-user-select: none;       
+        user-select: none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    td#redTDResLinks {
+        background-color: #ffcccc;
+        border: 1px solid black !important;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        td {
+            border: 1px solid black !important;
+        }
+    }
+</style>
+<script src="data.js"></script>
+<body>
+    <header style="display: flex; justify-content: center; align-items: center; color: white; font-size: 38px;">
+        Obliczenia podatku od PCC
+    </header>
+    <main>
+        <a href="podMajatkowe.html" 
+        style="cursor: pointer; color: white;  width: 100%; max-width: 100px; border: 0px; 
+            background-color: red; 
+            padding: 8px 24px; 
+            text-decoration: none;
+            font-size: 24px; text-align: center;">Back</a>
+        <br>
+        <br>
+        <div style="display: flex;">
+            <input value="Dodać podatek" onclick="addLine()" type="button" name="addValue" id="addValue" style="cursor: pointer; color: white;  width: 100%; max-width: 200px; border: 0px; 
+                background-color: green; 
+                padding: 8px 12px; 
+                margin-right: 12px;
+                font-size: 24px; text-align: center;">
+            <input value="Result" onclick="resultPCC()" type="button" name="resPodNier" id="resPodNier" style="cursor: pointer; color: white;  width: 100%; max-width: 120px; border: 0px; 
+                background-color: cornflowerblue; 
+                padding: 8px 12px; 
+                font-size: 24px; text-align: center; margin-right: 12px !important;">
+        </div>
+        <br>
+        <div style="width: 100%; overflow-x: scroll;">
+            <table style="width: 2100px; font-size: 24px;">
+                <tr>
+                    <th style="width: 740px;">Przedmiot opodatkowania</th>
+                    <th style="width: 280px;">Kwota</th>
+                    <th style="width: 200px;">Data</th>
+                    <th style="width: 280px;">Stawka</th>
+                    <th style="width: 200px;">Podatek</th>
+                    <th style="width: 200px;">Termin zapłaty podatku</th>
+                    <th style="width: 100px;"></th>
+                </tr>
+                <tbody></tbody>
+            </table>
+        </div>
+    </main>
+</body>
+<script>
+    let resTable = [];
+    let data = PCCprzedmiotOpod;
+
+    function onchnageStawka(element) {
+        try {
+            let stawka = parseFloat(Math.round(parseFloat(element.value.toString().replace(",", ".")) * 100) / 100);
+            if (!isNaN(stawka) && isFinite(stawka))
+                element.value = stawka;
+            else
+                element.value = 0;
+        }
+        catch {
+            element.value = 0;
+        }
+
+        saveTable();
+    }
+
+    function getMaxDays(month, year) {
+        if (month == 2) {
+            if (year % 400 === 0)
+                return 29;
+            else if  (year % 100 === 0)
+                return 29;
+            else if (year % 4 === 0)
+                return 29;
+            else
+                return 28;
+        }
+        else if (month == 4 || month == 6 || month == 9 || month == 11)
+            return 30;
+        else
+            return 31;
+    }
+
+    function getTermin(day, month, year) {
+        let maxDays = getMaxDays(month, year);
+        let maxMonthes = 12;
+        let termin = "";
+
+        day += 14;
+        if (day > maxDays) {
+            day -= maxDays;
+            month += 1;
+        }
+
+        if (month > maxMonthes) {
+            month -= maxMonthes;
+            year += 1;
+        }
+
+        if (!isNaN(month) && isFinite(month) && !isNaN(day) && isFinite(day) && !isNaN(year) && isFinite(year)) {
+            if (month < 10)
+                termin += `0${month}/`;
+            else
+                termin += `${month}/`;
+            if (day < 10)
+                termin += `0${day}/`;
+            else
+                termin += `${day}/`;
+            termin += `${year}`;
+        }
+        else
+            termin = "";
+
+        return termin;
+    }
+
+    function resultPCC() {
+        let elements = document.getElementsByTagName("table")[0].getElementsByTagName("tr");
+
+        for (let i = 0; i < resTable.length; i++) {
+            let date = new Date(resTable[i][4]);
+            elements[i + 1].getElementsByTagName("td")[5].innerHTML = 
+                getTermin(date.getDate(), date.getMonth() + 1, date.getFullYear());
+
+            let kwota = 0, stawka = 0;
+
+            try {
+                kwota = parseFloat(resTable[i][3]);
+            }
+            catch {
+                kwota = 0;
+            }
+
+            try {
+                stawka = parseFloat(resTable[i][5]);
+            }
+            catch {
+                stawka = 0;
+            }
+
+            if (isNaN(kwota) && !isFinite(kwota))
+                kwota = 0;
+
+            if (isNaN(stawka) && !isFinite(stawka))
+                stawka = 0;
+
+            if (resTable[i][0] == "Jakaś ze stron jest podatnikiem VAT" || resTable[i][2] == 
+                "sprzedaż, której przedmiotem jest prawo własności lokalu mieszkalnego, stanowiącego odrębną nieruchomość, prawo własności budynku mieszkalnego jednorodzinnego, spółdzielcze własnościowe prawo do lokalu dotyczące lokalu mieszkalnego albo domu jednorodzinnego, jeżeli kupującym jest osoba fizyczna lub osoby fizyczne, którym w dniu sprzedaży i przed tym dniem nie przysługiwało żadne z tych praw ani udział w tych prawach, chyba że udział ten nie przekracza lub nie przekraczał 50% i został nabyty w drodze dziedziczenia" || resTable[i][1] == "Inne" || kwota < 1000) {
+                elements[i + 1].getElementsByTagName("td")[4].innerHTML = "Jest zwolniony z podatku PCC";
+            }
+            else if (resTable[i][6] == "zł")
+                elements[i + 1].getElementsByTagName("td")[4].innerHTML = `${stawka}`;
+            else
+                elements[i + 1].getElementsByTagName("td")[4].innerHTML = `${parseFloat(Math.round(parseFloat(kwota * stawka / 100) * 100) / 100)}`;
+        }
+    }
+
+    function getTable() {
+        resTable = [];
+        let elements = document.getElementsByTagName("table")[0].getElementsByTagName("tr");
+
+        for (let i = 1; i < elements.length; i++) {
+            let buffer = [];
+            buffer.push(elements[i].getElementsByTagName("td")[0].getElementsByTagName("select")[0].value);
+            buffer.push(elements[i].getElementsByTagName("td")[0].getElementsByTagName("select")[1].value);
+            buffer.push(elements[i].getElementsByTagName("td")[0].getElementsByTagName("select")[2].value);
+            buffer.push(elements[i].getElementsByTagName("td")[1].getElementsByTagName("input")[0].value);
+            buffer.push(elements[i].getElementsByTagName("td")[2].getElementsByTagName("input")[0].value);
+            buffer.push(elements[i].getElementsByTagName("td")[3].getElementsByTagName("input")[0].value);
+            buffer.push(elements[i].getElementsByTagName("td")[3].getElementsByTagName("select")[0].value);
+            resTable.push(buffer);
+        }
+    }
+
+    function putTable() {
+        try {
+            let tbody = document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0];
+            let elements = tbody.getElementsByTagName("tr");
+
+            for (let i = 0; i < resTable.length; i++) {
+                elements[i + 1].getElementsByTagName("td")[0].getElementsByTagName("select")[0].value = resTable[i][0];
+                elements[i + 1].getElementsByTagName("td")[0].getElementsByTagName("select")[1].value = resTable[i][1];
+                elements[i + 1].getElementsByTagName("td")[0].getElementsByTagName("select")[2].value = resTable[i][2];
+                elements[i + 1].getElementsByTagName("td")[1].getElementsByTagName("input")[0].value = resTable[i][3];
+                elements[i + 1].getElementsByTagName("td")[2].getElementsByTagName("input")[0].value = resTable[i][4];
+                elements[i + 1].getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = resTable[i][5];
+                elements[i + 1].getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = resTable[i][6];
+            }
+        }
+        catch {
+            return;
+        }
+    }
+
+    function addLine() {
+        try {
+            getTable();
+        }
+        catch {
+
+        }
+
+        try {
+            document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
+            `<tr>
+                <td>
+                    <select oninput="onchnageVisibleTr(this)" 
+                        class="form-select mt-3" 
+                        style="margin: 0px !important; width: 100%; cursor: pointer; 
+                            font-size: 20px; max-width: 460px;">
+                        <option>Jakaś ze stron jest podatnikiem VAT</option>
+                        <option selected>Jakaś ze stron nie jest podatnikiem VAT</option>
+                    </select>
+                    <div style="display: flex; margin-top: 12px !important;">
+                        <select oninput="onchnageTypePCC(this)" 
+                            class="form-select mt-3" 
+                            style="margin: 0px !important; max-width: 280px; width: 100%; cursor: pointer; 
+                                font-size: 20px; margin-right: 12px !important;">
+                            
+                        </select>
+                        <select oninput="onchnageRodzajPCC(this)" 
+                            class="form-select mt-3" 
+                            style="margin: 0px !important; width: 100%; cursor: pointer; 
+                                font-size: 20px; margin-right: 12px !important;">
+                            
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div style="display: flex;">
+                        <input onchange="onchangeKwota(this)" type="text" 
+                            class="form-control" 
+                            style="height: 100%; font-size: 24px; padding: .46rem !important; margin-right: 12px;" value="">
+                        <div>zł</div>
+                    </div>
+                </td>
+                <td>
+                    <input onchange="saveTable()" type="date">
+                </td>
+                <td>
+                    <div style="display: flex;">
+                        <input onchange="onchnageStawka(this)" type="text" 
+                            class="form-control" 
+                            style="height: 100%; font-size: 24px; padding: .46rem !important; margin-right: 12px;" value="2">
+                        <select oninput="saveTable()" 
+                            id="typeStawka" 
+                            class="form-select mt-3" 
+                            style="margin: 0px !important; width: 100%; cursor: pointer; 
+                                font-size: 20px; max-width: 80px;">
+                            <option>%</option>
+                            <option>zł</option>
+                        </select>
+                    </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td>
+                    <input oninput="saveTable()" type="button" value="Usunąć" style="
+                            cursor: pointer; color: white; border: 0px; 
+                            background-color: red; 
+                            padding: 4px 12px;
+                            font-size: 24px; text-align: center;" onclick="removeLine(this)">
+                </td>
+            </tr>`;
+        }
+        catch {
+            
+        }
+        finally {
+            let index = document.getElementsByTagName("table")[0].getElementsByTagName("tr").length - 1;
+            setSelects(document.getElementsByTagName("table")[0].getElementsByTagName("tr")[index]);
+            putTable();
+            getTable();
+        }
+    }
+
+    function removeLine(btnRemove) {
+        try {
+            btnRemove.parentElement.parentElement.remove();
+            getTable();
+            putTable();
+        }
+        catch {
+
+        }
+    }
+
+    function setStawka(tr) {
+        try {
+            let rodzaj = tr.getElementsByTagName("td")[0].getElementsByTagName("select")[2];
+            let stawkaInput = tr.getElementsByTagName("td")[3].getElementsByTagName("input")[0];
+            let stawkaType = tr.getElementsByTagName("td")[3].getElementsByTagName("select")[0];
+
+            let indexType = 0;
+
+            for (let i = 0; i < data.length; i++) {
+                for (let j = 0; j < data[i][1].length; j++) {
+                    if (rodzaj.value == data[i][1][j]) {
+                        indexType = i;
+                        break;
+                    }
+                }
+            }
+
+            if (PCCStawki[indexType].length == 1) {
+                if (!isNaN(PCCStawki[indexType][0][0]) && isFinite(PCCStawki[indexType][0][0]))
+                    stawkaInput.value = PCCStawki[indexType][0][0];
+                else
+                    stawkaInput.value = "";
+                stawkaType.value = PCCStawki[indexType][0][1];
+            }
+            else {
+                let index;
+                if (rodzaj.value == "inne prawa majątkowe" || rodzaj.value == "zabezpieczenie wierzytelności o wysokości nieustalonej")
+                    index = 1;
+                else if (rodzaj.value == "sprzedaż, której przedmiotem jest prawo własności lokalu mieszkalnego, stanowiącego odrębną nieruchomość, prawo własności budynku mieszkalnego jednorodzinnego, spółdzielcze własnościowe prawo do lokalu dotyczące lokalu mieszkalnego albo domu jednorodzinnego, jeżeli kupującym jest osoba fizyczna lub osoby fizyczne, którym w dniu sprzedaży i przed tym dniem nie przysługiwało żadne z tych praw ani udział w tych prawach, chyba że udział ten nie przekracza lub nie przekraczał 50% i został nabyty w drodze dziedziczenia")
+                    index = 2;
+                else if (rodzaj.value == "kupujący nabywa co najmniej sześć lokali mieszkalnych stanowiących odrębne nieruchomości w jednym lub kilku budynkach wybudowanych na jednej nieruchomości gruntowej, opodatkowanych podatkiem od towarów i usług, lub udziały w tych lokalach albo nabył już co najmniej pięć takich lokali lub udziały w nich, od zawartej z tym samym kupującym umowy sprzedaży szóstego i każdego następnego takiego lokalu w tym budynku lub budynkach lub udziału w takim lokalu")
+                    index = 3;
+                else
+                    index = 0;
+                
+                if (!isNaN(PCCStawki[indexType][index][0]) && isFinite(PCCStawki[indexType][index][0]))
+                    stawkaInput.value = PCCStawki[indexType][index][0];
+                else
+                    stawkaInput.value = "";
+                stawkaType.value = PCCStawki[indexType][index][1];
+            }
+        }
+        catch {
+            return;
+        }
+    }
+
+    function saveTable() {
+        try {
+            getTable();
+            putTable();
+        }
+        catch {
+            return;
+        }
+    }
+
+    function onchangeKwota(kwotaInput) {
+        try {
+            let kwota = parseFloat(Math.round(parseFloat(kwotaInput.value.toString().replace(",", ".")) * 100) / 100);
+            if (!isNaN(kwota) && isFinite(kwota))
+                kwotaInput.value = kwota;
+            else
+                kwotaInput.value = 0;
+        }
+        catch {
+            kwotaInput.value = 0;
+        }
+
+        saveTable();
+    }
+
+    function onchnageVisibleTr(element) {
+        if (element.value == "Jakaś ze stron jest podatnikiem VAT") {
+            element.parentElement.getElementsByTagName("div")[0].style.display = "none";
+            element.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "";
+            element.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "%";
+        }
+        else {
+            element.parentElement.getElementsByTagName("div")[0].style.display = "flex";
+            element.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "2";
+            element.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "%";
+        }
+
+        saveTable();
+    }
+
+    function onchnageTypePCC(element) {
+        let index;
+        let rodzajPCC = element.parentElement.getElementsByTagName("select")[1];
+
+        try {
+            for (let i = 0; i < data.length; i++) {
+                if (element.value == data[i][0]) {
+                    index = i;
+                    break;
+                }
+            }
+
+            rodzajPCC.innerHTML = "";
+            for (let j = 0; j < data[index][1].length; j++)
+                rodzajPCC.innerHTML += `<option>${data[index][1][j]}</option>`;
+        }
+        catch {
+            for (let i = 0; i < data.length; i++)
+                for (let j = 0; j < data[i][1].length; j++)
+                    rodzajPCC.innerHTML += `<option>${data[i][1][j]}</option>`;
+        }
+
+        setStawka(element.parentElement.parentElement.parentElement);
+        saveTable();
+    }
+
+    function onchnageRodzajPCC(element) {
+        let index;
+        let typePCC = element.parentElement.getElementsByTagName("select")[0];
+
+        try {
+            for (let i = 0; i < data.length; i++) {
+                for (let j = 0; j < data[i][1].length; j++) {
+                    if (element.value == data[i][1][j]) {
+                        index = i;
+                        break;
+                    }
+                }
+            }
+
+            typePCC.value = data[index][0];
+        }
+        catch {
+            
+        }
+
+        setStawka(element.parentElement.parentElement.parentElement);
+        saveTable();
+    }
+
+    function setSelects(tr) {
+        try {
+            let typePCC = tr.getElementsByTagName("select")[1];
+            typePCC.innerHTML = "";
+            typePCC.innerHTML += "<option value></option>";
+
+            for (let i = 0; i < data.length; i++)
+                if (i == 0)
+                    typePCC.innerHTML += `<option selected>${data[i][0]}</option>`;
+                else
+                    typePCC.innerHTML += `<option>${data[i][0]}</option>`;
+        }
+        catch {
+            
+        }
+
+        try {
+            let rodzajPCC = tr.getElementsByTagName("select")[2];
+            rodzajPCC.innerHTML = "";
+
+            for (let i = 0; i < data.length; i++)
+                for (let j = 0; j < data[i][1].length; j++)
+                    rodzajPCC.innerHTML += `<option>${data[i][1][j]}</option>`;
+        }
+        catch {
+
+        }
+    }
+</script>

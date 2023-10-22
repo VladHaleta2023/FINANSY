@@ -70,7 +70,7 @@ i.Exit {
         font-size: 32px !important;
     }
 
-    div#tableDivShow { 
+    div#tableDivShow, div#tableDivNier, div#tablePCC, div#tableOplLok { 
         display: block !important;
         overflow-x: scroll !important; 
         width: 100% !important;

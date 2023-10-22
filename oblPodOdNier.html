@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.75">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <title>FINANSY</title>
+</head>
+<style>
+    td, th {
+        border: 1px solid black !important;
+        vertical-align: top !important;
+    }
+
+    div {
+        overflow: -moz-scrollbars-none;
+        -webkit-touch-callout: none; 
+        -webkit-user-select: none;   
+        -khtml-user-select: none;    
+        -moz-user-select: none;     
+        -ms-user-select: none;       
+        user-select: none;
+    }
+
+    div::-webkit-scrollbar {
+        width: 0;
+    }
+
+    td#redTDResLinks {
+        background-color: #ffcccc;
+        border: 1px solid black !important;
+    }
+
+    @media only screen and (max-width: 1000px) {
+        td {
+            border: 1px solid black !important;
+        }
+    }
+</style>
+<script src="data.js"></script>
+<body>
+    <header style="display: flex; justify-content: center; align-items: center; color: white; font-size: 38px;">
+        Obliczenia podatku od nieruchomości
+    </header>
+    <main>
+        <a href="podMajatkowe.html" 
+        style="cursor: pointer; color: white;  width: 100%; max-width: 100px; border: 0px; 
+            background-color: red; 
+            padding: 8px 24px; 
+            text-decoration: none;
+            font-size: 24px; text-align: center;">Back</a>
+        <br>
+        <br>
+        <div id="divYear" style="display: flex; flex-direction: row; align-items: center; color: white; font-size: 24px;">
+            <div style="margin-right: 16px;" id="textYear">Rok:</div>
+            <select oninput="onchnageYear(this)" id="yearTable" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px;">
+                <option>2022</option>
+                <option>2023</option>
+            </select>
+        </div>
+        <br>
+        <input value="Dodać podatek" onclick="addLine()" type="button" name="addValue" id="addValue" style="cursor: pointer; color: white;  width: 100%; max-width: 200px; border: 0px; 
+                background-color: green; 
+                padding: 8px 12px; 
+                font-size: 24px; text-align: center;">
+        <br>
+        <br>
+        <div style="width: 100%; overflow-x: scroll;" id="divTable">
+            <table style="width: 1402px; font-size: 24px;">
+                <tr>
+                    <th style="width: 60px; text-align: center;"></th>
+                    <th style="width: 812px; text-align: center;">Przedmiot opodatkowania</th>
+                    <th style="width: 240px; text-align: center;">Powierzchnia/Kwota (m<sup>2</sup>, zł)</th>
+                    <th style="width: 160px; text-align: center;">Stawka (zł/m<sup>2</sup>, %)</th>
+                    <th style="width: 500px; text-align: center;">Opis<br><span style="font-size: 80%;">(nieobowiązkowe)</span></th>
+                    <th style="width: 100px; text-align: center;"></th>
+                </tr>
+                <tbody>
+
+                </tbody>
+            </table>
+        </div>
+        <div id="resultPodNierDiv">
+            <div>
+                <input value="Result" onclick="resultPodNier()" type="button" name="resPodNier" id="resPodNier" style="cursor: pointer; color: white;  width: 100%; max-width: 120px; border: 0px; 
+                    background-color: cornflowerblue; 
+                    padding: 8px 12px; 
+                    font-size: 24px; text-align: center; margin-right: 12px !important;">
+                <input value="Invisible" onclick="inVisible()" type="button" name="resPodNier" id="resPodNier" style="cursor: pointer; color: white;  width: 100%; max-width: 160px; border: 0px; 
+                    background-color: cornflowerblue; 
+                    padding: 8px 12px; 
+                    font-size: 24px; text-align: center; margin-right: 12px !important;">
+            </div>
+            <br>
+            <div style="width: 100%; overflow-x: scroll; display: none;" id="divResult">
+                <table style="width: 100%; max-width: 800px; font-size: 24px;" id="tableResult">
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+<script>
+    let resTable = [];
+    let chooseElements = [];
+    let links = [];
+
+    function inVisible() {
+        document.getElementById("divResult").style.display = "none";
+    }
+
+    function backToMain() {
+        try {
+            document.getElementsByTagName("main")[0].getElementsByTagName("a")[0].style.display = "block";
+            document.getElementById("textYear").style.fontWeight = "normal";
+            document.getElementById("yearTable").style.display = "block";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[2].style.display = "block";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[4].style.display = "block";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[5].style.display = "block";
+            document.getElementById("yearTable").value = document.getElementById("textMenuYear").innerHTML;
+            document.getElementById("textMenuYear").remove();
+            document.getElementById("addValue").style.display = "block";
+            document.getElementById("divTable").style.display = "block";
+            document.getElementById("resultPodNierDiv").style.display = "block";
+            document.getElementById("backToMain").style.display = "none";
+            document.getElementById("menuDiv").remove();
+            putResTable();
+        }
+        catch {
+            return;
+        }
+    }
+
+    function resultPodNier() {
+        try {
+            document.getElementById("divResult").style.display = "block";
+            document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML = "";
+
+            document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+            `<tr>
+                <th style="text-align: center; font-weight: bold;">Grunty</th>
+            </tr>`;
+
+            let k = 1;
+            let res = 0;
+            for (let i = 0; i < resTable.length; i++) {
+                if (resTable[i][0] == "Grunty" && chooseElements[i]) {
+                    let value = parseFloat(Math.round(parseFloat(resTable[i][2] * resTable[i][3]) * 100) / 100);
+
+                    if (value < 0)
+                        value = 0;
+
+                    document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                    `<tr>
+                        <td>${k}. ${resTable[i][1]}</td>
+                    </tr>`;
+
+                    if (resTable[i][6] != "") {
+                        document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                        `<tr>
+                            <td>Opis: ${resTable[i][6]}</td>
+                        </tr>`;
+                    }
+                    
+                    let v2 = resTable[i][2], v3 = resTable[i][3];
+                    if (resTable[i][2] < 0)
+                        v2 = 0;
+                    if (resTable[i][3] < 0)
+                        v3 = 0;
+
+                    document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                    `<tr style="border-bottom: 3px solid black !important;">
+                        <td>${v2}${resTable[i][4]} * ${v3}${resTable[i][5]} = ${value}</td>
+                    </tr>`;
+
+                    res += value;
+                    k++;
+                }
+            }
+
+            document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+            `<tr>
+                <th style="text-align: center; font-weight: bold;">Budynki lub ich części</th>
+            </tr>`;
+            
+            k = 1;
+            for (let i = 0; i < resTable.length; i++) {
+                if (resTable[i][0] == "Budynki lub ich części" && chooseElements[i]) {
+                    let wys = 0;
+
+                    try {
+                        if (!isNaN(wysArr[i]) && isFinite(wysArr[i]))
+                            wys = parseFloat(wysArr[i]);
+                    }
+                    catch {
+
+                    }
+                    finally {
+                        if (wys < 0)
+                            wys = 0;
+                    }
+
+                    let value = parseFloat(Math.round(parseFloat(resTable[i][2] * resTable[i][3]) * 100) / 100);
+
+                    if (value < 0)
+                        value = 0;
+
+                    document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                    `<tr>
+                        <td>${k}. ${resTable[i][1]}</td>
+                    </tr>`;
+
+                    if (resTable[i][6] != "") {
+                        document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                        `<tr>
+                            <td>Opis: ${resTable[i][6]}</td>
+                        </tr>`;
+                    }
+
+                    let v2 = resTable[i][2], v3 = resTable[i][3];
+                    if (resTable[i][2] < 0)
+                        v2 = 0;
+                    if (resTable[i][3] < 0)
+                        v3 = 0;
+
+                    if (wys < 1.4) {
+                        value = 0;
+                        document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                        `<tr style="border-bottom: 3px solid black !important;">
+                            <td>${v2}${resTable[i][4]} * ${v3}${resTable[i][5]} * 0% = ${value}</td>
+                        </tr>`;
+                    }
+                    else if (wys >= 1.4 && wys <= 2.2) {
+                        value = parseFloat(Math.round(parseFloat(value / 2) * 100) / 100);
+                        document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                        `<tr style="border-bottom: 3px solid black !important;">
+                            <td>${v2}${resTable[i][4]} * ${v3}${resTable[i][5]} * 50% = ${value}</td>
+                        </tr>`;
+                    }
+                    else {
+                        document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                        `<tr style="border-bottom: 3px solid black !important;">
+                            <td>${v2}${resTable[i][4]} * ${v3}${resTable[i][5]} * 100% = ${value}</td>
+                        </tr>`;
+                    }
+
+                    res += value;
+                    k++;
+                }
+            }
+
+            document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+            `<tr>
+                <th style="text-align: center; font-weight: bold;">Budowle</th>
+            </tr>`;
+
+            k = 1;
+            for (let i = 0; i < resTable.length; i++) {
+                if (resTable[i][0] == "Budowle" && chooseElements[i]) {
+                    let procent = parseFloat(resTable[i][3] / 100);
+                    let value = parseFloat(Math.round(parseFloat(resTable[i][2] * procent) * 100) / 100);
+
+                    if (value < 0)
+                        value = 0;
+
+                    document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                    `<tr>
+                        <td>${k}. ${resTable[i][1]}</td>
+                    </tr>`;
+
+                    if (resTable[i][6] != "") {
+                        document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                        `<tr>
+                            <td>Opis: ${resTable[i][6]}</td>
+                        </tr>`;
+                    }
+
+                    let v2 = resTable[i][2], v3 = resTable[i][3];
+                    if (resTable[i][2] < 0)
+                        v2 = 0;
+                    if (resTable[i][3] < 0)
+                        v3 = 0;
+                    
+                    document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+                    `<tr style="border-bottom: 3px solid black !important;">
+                        <td>${v2}${resTable[i][4]} * ${v3}${resTable[i][5]} = ${value}</td>
+                    </tr>`;
+
+                    res += value;
+                }
+            }
+
+            res = parseFloat(Math.round(parseFloat(res) * 100) / 100);
+
+            if (res < 0)
+                res = 0;
+
+            document.getElementById("tableResult").getElementsByTagName("tbody")[0].innerHTML += 
+            `<tr>
+                <th style="text-align: center; font-weight: bold;">Podatek od nieruchomości</th>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;">${res}zł</td>
+            </tr>`;
+        }
+        catch {
+
+        }
+    }
+
+    function onchnagePowKwota(selectThis) {
+        if (selectThis.value == "Absolutna") {
+            document.getElementById("absoluteDiv").style.display = "flex";
+            document.getElementById("powRelType").style.display = "none";
+            document.getElementById("relativeDiv").style.display = "none";
+        }
+        else {
+            document.getElementById("powRelType").style.display = "block";
+            document.getElementById("relativeDiv").style.display = "block";
+        }
+    }
+
+    let clickTrIndex;
+
+    function changeColorTr(tr) {
+        for (let i = 0; i < document.getElementById("tableLinks").getElementsByTagName("tr").length; i++) {
+            for (let j = 0; j < document.getElementById("tableLinks").getElementsByTagName("tr")[i].getElementsByTagName("td").length; j++) {
+                if (document.getElementById("tableLinks").getElementsByTagName("tr")[i].getElementsByTagName("td")[j].id != "redTDResLinks")
+                    document.getElementById("tableLinks").getElementsByTagName("tr")[i].getElementsByTagName("td")[j].style.backgroundColor = "white";
+                else
+                    document.getElementById("tableLinks").getElementsByTagName("tr")[i].getElementsByTagName("td")[j].style.backgroundColor = "#ffcccc";
+            }
+        }
+
+        for (let i = 0; i < tr.getElementsByTagName("td").length; i++)
+            tr.getElementsByTagName("td")[i].style.backgroundColor = "rgb(201, 228, 255)";
+        
+        clickTrIndex = (tr ? [...tr.parentNode.children].indexOf(tr) : -1);
+    }
+
+    let htmlKwotaType, resLinks = [], index;
+
+    function onchnageRelType(element) {
+        if (element.value == "Procentowa") {
+            document.getElementById("absoluteDiv").style.display = "flex";
+            
+            try 
+            {
+            document.getElementById("elementKwotaType").innerHTML = `<option>%</option>`;
+            }
+            catch {
+
+            }
+
+            try {
+                document.getElementById("elementKwotaTypeBudowle").innerHTML = `%`;
+            }
+            catch {
+
+            }
+        }
+        else if (element.value == "Kwotowa") {
+            document.getElementById("absoluteDiv").style.display = "flex";
+
+            try {
+                if (document.getElementById("elementKwotaType").innerHTML)
+                    document.getElementById("elementKwotaType").innerHTML =  
+                    `<option>mm2</option>
+                    <option>cm2</option>
+                    <option selected>m2</option>
+                    <option>a</option>
+                    <option>ha</option>
+                    <option>km2</option>`;
+                }
+            catch {
+
+            }
+
+            try {
+                if (document.getElementById("elementKwotaTypeBudowle").innerHTML) {
+                    document.getElementById("elementKwotaTypeBudowle").innerHTML = `zł`;
+                }
+            }
+            catch {
+
+            }
+        }
+        else {
+            document.getElementById("absoluteDiv").style.display = "none";
+        }
+    }
+
+    let resValue, wysArr = [];
+    let wysTypeDefinition = 1;
+
+    function getResultAbs() {
+        try {
+            resValue = parseFloat(document.getElementById("kwotaInput").value.toString().replace(",", "."));
+            let type;
+            try {
+                type = document.getElementById("elementKwotaType").value;
+            }
+            catch {
+
+            }
+
+            try {
+                type = document.getElementById("elementKwotaTypeBudowle").value;
+            }
+            catch {
+
+            }
+
+            if (type == "mm2")
+                resValue = parseFloat(resValue / 1000000);
+            else if (type == "cm2")
+                resValue = parseFloat(resValue / 10000);
+            else if (type == "dm2")
+                resValue = parseFloat(resValue / 100);
+            else if (type == "a")
+                resValue = parseFloat(resValue * 100);
+            else if (type == "ha")
+                resValue = parseFloat(resValue * 10000);
+            else if (type == "km2")
+                resValue = parseFloat(resValue * 1000000);
+
+            try {
+                let typ = resTable[index][0];
+
+                if (typ == "Budynki lub ich części") {
+                    if (document.getElementById("wysTypeDefinition").style.display == "block") {
+                        wysArr[index] = wysTypeDefinition;
+                        wysTypeDefinition = 1;
+                    }
+                    else {
+                        try {
+                            wysValue = parseFloat(document.getElementById("wysInput").value.toString().replace(",", "."));
+                            if (!isNaN(wysValue) && isFinite(wysValue))
+                                wysArr[index] = parseFloat(Math.round(parseFloat(wysValue) * 100) / 100);
+                            else 
+                                wysArr[index] = 0;
+                        }
+                        catch {
+
+                        }
+                    }
+                }
+            }
+            catch {
+                resValue = 0;
+                return;
+            }
+        }
+        catch {
+            return;
+        }
+    }
+
+    function resultPowKwota() {
+        if (document.getElementById("powKwotaElement").value == "Absolutna") {
+            try {
+                let typ = resTable[index][0];
+
+                if (typ == "Budynki lub ich części") {
+                    let wysValue = 0;
+
+                    if (document.getElementById("wysTypeDefinition").style.display == "block")
+                        wysArr[index] = wysTypeDefinition;
+                    else {
+                        try {
+                            wysValue = parseFloat(document.getElementById("wysInput").value.toString().replace(",", "."));
+                            if (!isNaN(wysValue) && isFinite(wysValue))
+                                wysArr[index] = parseFloat(Math.round(parseFloat(wysValue) * 100) / 100);
+                            else 
+                                wysArr[index] = 0;
+                        }
+                        catch {
+
+                        }
+                    }
+
+                    alert(wysArr[index]);
+                }
+            }
+            catch {
+
+            }
+
+            getResultAbs();
+            links[index] = undefined;
+        }
+        else {
+            if (document.getElementById("powRelType").value == "Kwotowa") {
+                getResultAbs();
+
+                try {
+                    let typ = resTable[index][0];
+
+                    if (typ == "Budynki lub ich części") {
+                        let wysValue = 0;
+
+                        if (document.getElementById("wysTypeDefinition").style.display == "block")
+                            wysArr[index] = wysTypeDefinition;
+                        else {
+                            try {
+                                wysValue = parseFloat(document.getElementById("wysInput").value.toString().replace(",", "."));
+                                if (!isNaN(wysValue) && isFinite(wysValue))
+                                    wysArr[index] = parseFloat(Math.round(parseFloat(wysValue) * 100) / 100);
+                                else 
+                                    wysArr[index] = 0;
+                            }
+                            catch {
+
+                            }
+                        }
+                    }
+                }
+                catch {
+
+                }
+
+                try {
+                    if (!isNaN(clickTrIndex) && isFinite(clickTrIndex))
+                        links[index] = resLinks[clickTrIndex][0];
+                }
+                catch {
+                    resValue = 0;
+                    return;
+                }
+            }
+            else if (document.getElementById("powRelType").value == "Procentowa") {
+                try {
+                    let type;
+                    try {
+                        type = document.getElementById("elementKwotaType").value;
+                    }
+                    catch {
+
+                    }
+
+                    try {
+                        type = document.getElementById("elementKwotaTypeBudowle").value;
+                    }
+                    catch {
+
+                    }
+
+                    try {
+                        let typ = resTable[index][0];
+
+                        if (typ == "Budynki lub ich części") {
+                            let wysValue = 0;
+
+                            if (document.getElementById("wysTypeDefinition").style.display == "block")
+                                wysArr[index] = wysTypeDefinition;
+                            else {
+                                try {
+                                    wysValue = parseFloat(document.getElementById("wysInput").value.toString().replace(",", "."));
+                                    if (!isNaN(wysValue) && isFinite(wysValue))
+                                        wysArr[index] = parseFloat(Math.round(parseFloat(wysValue) * 100) / 100);
+                                    else 
+                                        wysArr[index] = 0;
+                                }
+                                catch {
+
+                                }
+                            }
+                        }
+                    }
+                    catch {
+
+                    }
+
+                    try {
+                        if (!isNaN(clickTrIndex) && isFinite(clickTrIndex)) {
+                            links[index] = resLinks[clickTrIndex][0];
+                            resValue = parseFloat(Math.round(parseFloat(document.getElementById("kwotaInput").value.toString().replace(",", ".")) * 100) / 100);
+                            resValue = resTable[links[index]][2] * (resValue / 100);
+                        }
+                    }
+                    catch {
+                        resValue = 0;
+                        return;
+                    }
+                }
+                catch {
+
+                }
+            }
+            else {
+                try {
+                    let type;
+                    try {
+                        type = document.getElementById("elementKwotaType").value;
+                    }
+                    catch {
+
+                    }
+
+                    try {
+                        type = document.getElementById("elementKwotaTypeBudowle").value;
+                    }
+                    catch {
+
+                    }
+
+                    try {
+                        let typ = resTable[index][0];
+
+                        if (typ == "Budynki lub ich części") {
+                            let wysValue = 0;
+
+                            if (document.getElementById("wysTypeDefinition").style.display == "block")
+                                wysArr[index] = wysTypeDefinition;
+                            else {
+                                try {
+                                    wysValue = parseFloat(document.getElementById("wysInput").value.toString().replace(",", "."));
+                                    if (!isNaN(wysValue) && isFinite(wysValue))
+                                        wysArr[index] = parseFloat(Math.round(parseFloat(wysValue) * 100) / 100);
+                                    else 
+                                        wysArr[index] = 0;
+                                }
+                                catch {
+
+                                }
+                            }
+                        }
+                    }
+                    catch {
+
+                    }
+
+                    try {
+                        let sum = 0;
+
+                        if (!isNaN(clickTrIndex) && isFinite(clickTrIndex)) {
+                            links[index] = resLinks[clickTrIndex][0];
+
+                            for (let i = 0; i < resLinks.length; i++) {
+                                if (links[i] == links[index] && i != index)
+                                    sum += resLinks[i][1][2];
+                            }
+                            
+                            resValue = parseFloat(Math.round(parseFloat(resLinks[links[index]][1][2] - sum) * 100) / 100);
+                            if (resValue < 0)
+                                resValue = 0;
+                        }
+                    }
+                    catch {
+                        resValue = 0;
+                        return;
+                    }
+                }
+                catch {
+
+                }
+            }
+        }
+
+        try {
+            if (resValue < 0)
+                resValue = 0;
+
+            resTable[index][2] = parseFloat(Math.round(parseFloat(resValue) * 100) / 100);
+        }
+        catch {
+
+        }
+        finally {
+            backToMain();
+        }
+    }
+
+    let elementLink;
+
+    function onchnageRelTable(typeTable) {
+        let value = typeTable.value;
+        let el = elementLink.parentElement.parentElement.parentElement;
+        index = (el ? [...el.parentNode.children].indexOf(el) : -1) - 1;
+
+        switch(value) {
+            case "Grunty":
+                resLinks = [];
+                for (let i = 0; i < resTable.length; i++)
+                    if (resTable[i][0] == "Grunty")
+                        resLinks.push([i, resTable[i]]);
+                break;
+            case "Budynki lub ich części":
+                resLinks = [];
+                for (let i = 0; i < resTable.length; i++)
+                    if (resTable[i][0] == "Budynki lub ich części")
+                        resLinks.push([i, resTable[i]]);
+                break;
+            case "Budowle":
+                resLinks = [];
+                for (let i = 0; i < resTable.length; i++)
+                    if (resTable[i][0] == "Budowle")
+                        resLinks.push([i, resTable[i]]);
+                break;
+            default:
+                resLinks = [];
+                for (let i = 0; i < resTable.length; i++)
+                    resLinks.push([i, resTable[i]]);
+                break;
+        }
+
+        let tbody = document.getElementById("tbodyResLinks");
+        tbody.innerHTML = "";
+
+        for (let i = 0; i < resLinks.length; i++) {
+            if (resLinks[i][0] == index) {
+                let link = "";
+                if (!isNaN(links[resLinks[i][0]]) && isFinite(links[resLinks[i][0]]) && links.length != 0)
+                    link = parseInt(links[resLinks[i][0]]) + 1;
+                tbody.innerHTML +=
+                `<tr onclick="changeColorTr(this)">
+                    <td id="redTDResLinks">${resLinks[i][0] + 1}</td>
+                    <td id="redTDResLinks">${link}</td>
+                    <td id="redTDResLinks">${resLinks[i][1][0]}</td>
+                    <td id="redTDResLinks">${resLinks[i][1][1]}</td>
+                    <td id="redTDResLinks">${resLinks[i][1][2]}</td>
+                    <td id="redTDResLinks">${resLinks[i][1][3]}</td>
+                    <td id="redTDResLinks"">${resLinks[i][1][6]}</td>
+                </tr>`;
+            }
+            else {
+                let link = "";
+                if (!isNaN(links[resLinks[i][0]]) && isFinite(links[resLinks[i][0]]))
+                    link = parseInt(links[resLinks[i][0]]) + 1;
+                tbody.innerHTML +=
+                `<tr onclick="changeColorTr(this)">
+                    <td>${resLinks[i][0] + 1}</td>
+                    <td>${link}</td>
+                    <td>${resLinks[i][1][0]}</td>
+                    <td>${resLinks[i][1][1]}</td>
+                    <td>${resLinks[i][1][2]}</td>
+                    <td>${resLinks[i][1][3]}</td>
+                    <td>${resLinks[i][1][6]}</td>
+                </tr>`;
+            }
+        }
+    }
+
+    function onchnageWysType(typeWys) {
+        if (typeWys.value == "Absolutna") {
+            document.getElementById("wysInput").style.display = "block";
+            document.getElementById("wysTypeDefinition").style.display = "none";
+        }
+        else {
+            document.getElementById("wysInput").style.display = "none";
+            document.getElementById("wysTypeDefinition").style.display = "block";
+        }
+    }
+
+    function onchnageWysTypeDefinition(typeWysDefinition) {
+        if (typeWysDefinition.value == "Poniżej 1.40")
+            wysTypeDefinition = 1;
+        else if (typeWysDefinition.value == "Powyżej 2.20")
+            wysTypeDefinition = 3;
+        else
+            wysTypeDefinition = 1.4;
+    }
+
+    function onchangeElement(element) {
+        elementLink = element;
+        let year = document.getElementById("yearTable").value;
+        let el = element.parentElement.parentElement.parentElement;
+        index = (el ? [...el.parentNode.children].indexOf(el) : -1) - 1;
+        let value = resTable[index];
+
+        resLinks = [];
+
+        for (let i = 0; i < resTable.length; i++)
+            resLinks.push([i, resTable[i]]);
+
+        try {
+            document.getElementsByTagName("main")[0].getElementsByTagName("a")[0].style.display = "none";
+            document.getElementsByTagName("main")[0].innerHTML = 
+            `<div id="backToMain"
+            style="cursor: pointer; color: white;  width: 100%; max-width: 100px; border: 0px; 
+                background-color: red; 
+                padding: 8px 24px; 
+                text-decoration: none;
+                font-size: 24px; text-align: center;" onclick="backToMain()">Back</div>` + document.getElementsByTagName("main")[0].innerHTML;
+            document.getElementById("divYear").innerHTML += `<div id="textMenuYear">${year}</div>`;
+            document.getElementById("textYear").style.fontWeight = "bold";
+            document.getElementById("yearTable").style.display = "none";
+            document.getElementById("addValue").style.display = "none";
+            document.getElementById("resultPodNierDiv").style.display = "none";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[1].style.display = "none";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[2].style.display = "none";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[3].style.display = "none";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[4].style.display = "none";
+            document.getElementsByTagName("main")[0].getElementsByTagName("br")[5].style.display = "none";
+            document.getElementById("divTable").style.display = "none";
+        }
+        catch {
+
+        }
+
+        try {
+            if (value[0] == "Budowle") {
+                htmlKwotaType = `<div id="elementKwotaTypeBudowle">zł</div>`;
+            }
+            else {
+                htmlKwotaType =
+                `<select id="elementKwotaType" class="form-select mt-3" style="margin: 0px !important; width: 120px !important; cursor: pointer; font-size: 20px;">
+                    <option>mm2</option>
+                    <option>cm2</option>
+                    <option>dm2</option>
+                    <option selected>m2</option>
+                    <option>a</option>
+                    <option>ha</option>
+                    <option>km2</option>
+                </select>`;
+            }
+
+            let wysKw = "";
+
+            try {
+                if (!isNaN(wysArr[index]) && isFinite(wysArr[index]) && wysArr != 0)
+                    wysKw = parseFloat(Math.round(parseFloat(wysArr[index]) * 100) / 100);
+            }
+            catch {
+
+            }
+
+            document.getElementsByTagName("main")[0].innerHTML +=
+            `<div id="menuDiv">
+                <br>
+                <span style="font-weight: bold; font-size: 32px; color: white;">Podatek</span>
+                <div id="Lp" style="max-width: 800px; width: 100%; color: white; font-size: 24px;">
+                    <div style="background-color: #04AA6D; text-align: center; padding: 12px; font-weight: bold; border: 1px solid black;">Lp</div>
+                    <div style="background-color: white; padding: 12px; max-width: 800px; width: 100%; border: 1px solid black; color: black;">${index + 1}</div>
+                </div>
+                <div id="Typ" style="max-width: 800px; width: 100%; color: white; font-size: 24px;">
+                    <div style="background-color: #04AA6D; text-align: center; padding: 12px; font-weight: bold; border: 1px solid black;">Typ</div>
+                    <div style="background-color: white; padding: 12px; max-width: 800px; width: 100%; border: 1px solid black; color: black;">${value[0]}</div>
+                </div>
+                <div id="Rodzaj" style="max-width: 800px; width: 100%; color: white; font-size: 24px;">
+                    <div style="background-color: #04AA6D; text-align: center; padding: 12px; font-weight: bold; border: 1px solid black;">Rodzaj</div>
+                    <div style="background-color: white; padding: 12px; max-width: 800px; width: 100%; border: 1px solid black; color: black;">${value[1]}</div>
+                </div>
+                <div id="Stawka" style="max-width: 800px; width: 100%; color: white; font-size: 24px;">
+                    <div style="background-color: #04AA6D; text-align: center; padding: 12px; font-weight: bold; border: 1px solid black;">Stawka</div>
+                    <div style="background-color: white; padding: 12px; max-width: 800px; width: 100%; border: 1px solid black; color: black;">${(value[3] != "") ? value[3]: "0"}${value[5]}</div>
+                </div>
+                <div id="powierzchniaKwota" style="max-width: 800px; width: 100%; color: white; font-size: 24px;">
+                    <div style="background-color: #04AA6D; text-align: center; padding: 12px; font-weight: bold; border: 1px solid black;">Powierzchnia/Kwota</div>
+                    <div style="background-color: white; padding: 12px; max-width: 800px; width: 100%; border: 1px solid black; color: black;">
+                        <div style="display: flex;">
+                            <select oninput="onchnagePowKwota(this)" id="powKwotaElement" class="form-select mt-3" style="margin: 0px !important; max-width: 140px; width: 100%; cursor: pointer; font-size: 20px; margin-bottom: 12px !important;">
+                                <option>Absolutna</option>
+                                <option>Relatywna</option>
+                            </select>
+                            <select oninput="onchnageRelType(this)" id="powRelType" class="form-select mt-3" style="display: none; margin: 0px !important; max-width: 200px; width: 100%; cursor: pointer; font-size: 20px; margin-bottom: 12px !important; margin-left: 12px !important;">
+                                <option>Kwotowa</option>
+                                <option>Procentowa</option>
+                                <option>Pozostała część</option>
+                            </select>
+                        </div>
+                        <div style="display: flex;" id="absoluteDiv">
+                            <input id="kwotaInput" class="form-control" 
+                                style="height: 100%; font-size: 24px; padding: .46rem !important; margin-right: 12px !important;" 
+                                type="text" 
+                                value="${(value[2] != "") ? value[2]: "0"}">
+                            ${htmlKwotaType}
+                        </div>
+                        <br>
+                        <div style="display: none; flex-direction: column; margin-top: 12px !important;" id="wysKwota">
+                            <select oninput="onchnageWysType(this)" id="wysType" class="form-select mt-3" 
+                            style="margin: 0px !important; max-width: 140px; width: 100%; cursor: pointer; 
+                            font-size: 20px; margin-bottom: 12px !important;">
+                                <option>Absolutna</option>
+                                <option>Definiowa</option>
+                            </select>
+                            <div style="display: flex;">
+                                <input id="wysInput" class="form-control" 
+                                    style="width: 100%; max-width: 300px; height: 100%; font-size: 24px; padding: .46rem !important; margin-right: 12px !important;" 
+                                    type="text"
+                                    value="${wysKw}">
+                                <select oninput="onchnageWysTypeDefinition(this)" id="wysTypeDefinition" class="form-select mt-3" 
+                                style="display: none; margin: 0px !important; max-width: 200px; width: 100%; cursor: pointer; 
+                                font-size: 20px; margin-right: 12px !important;">
+                                    <option>Poniżej 1.40</option>
+                                    <option>Od 1.40 do 2.20</option>
+                                    <option>Powyżej 2.20</option>
+                                </select>
+                                <div>m</div>
+                            </div>
+                        </div>
+                        <br>
+                        <div id="relativeDiv" style="display: none;">
+                            <span style="font-weight: bold;">Kwota relatywna do</span>
+                            <select oninput="onchnageRelTable(this)" id="powRelTable" class="form-select mt-3" 
+                                style="margin: 0px !important; 
+                                max-width: 300px; 
+                                width: 100%; 
+                                cursor: pointer; 
+                                font-size: 20px; 
+                                margin-top: 12px !important;">
+                                <option>Wszystkie</option>
+                                <option>Grunty</option>
+                                <option>Budynki lub ich części</option>
+                                <option>Budowle</option>
+                            </select>
+                            <div style="width: 100%; overflow-x: scroll; max-width: 800px;" id="divLinks">
+                                <table style="width: 1700px; margin-top: 12px !important;" id="tableLinks">
+                                    <tr>
+                                        <th style="width: 100px; text-align: center;">Lp</th>
+                                        <th style="width: 100px; text-align: center;">Link</th>
+                                        <th style="width: 200px; text-align: center;">Typ</th>
+                                        <th style="width: 600px; text-align: center;">Rodzaj</th>
+                                        <th style="width: 200px; text-align: center;">Powierzchnia/Kwota</th>
+                                        <th style="width: 100px; text-align: center;">Stawka</th>
+                                        <th style="width: 400px; text-align: center;">Opis</th>
+                                    </tr>
+                                    <tbody id="tbodyResLinks"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div id="resultPowKwota" style="cursor: pointer; color: white;  width: 100%; max-width: 140px; border: 0px; 
+                                background-color: cornflowerblue; 
+                                padding: 8px 24px; 
+                                text-decoration: none;
+                                font-size: 24px; text-align: center;" onclick="resultPowKwota()">Result</div>
+                    </div>
+                </div>
+                <div id="Opis" style="max-width: 800px; width: 100%; color: white; font-size: 24px;">
+                    <div style="background-color: #04AA6D; text-align: center; padding: 12px; font-weight: bold; border: 1px solid black;">Opis</div>
+                    <div style="background-color: white; padding: 12px; max-width: 800px; width: 100%; border: 1px solid black; color: black;">${value[6]}</div>
+                </div>
+            </div>`;
+
+            if (value[0] == "Budynki lub ich części")
+                document.getElementById("wysKwota").style.display = "flex";
+            else
+                document.getElementById("wysKwota").style.display = "none";
+
+            let tbody = document.getElementById("tbodyResLinks");
+            tbody.innerHTML = "";
+
+            for (let i = 0; i < resLinks.length; i++) {
+                if (resLinks[i][0] == index) {
+                    let link = "";
+                    if (!isNaN(links[resLinks[i][0]]) && isFinite(links[resLinks[i][0]]) && links.length != 0)
+                        link = parseInt(links[resLinks[i][0]]) + 1;
+                    tbody.innerHTML +=
+                    `<tr onclick="changeColorTr(this)">
+                        <td id="redTDResLinks">${resLinks[i][0] + 1}</td>
+                        <td id="redTDResLinks">${link}</td>
+                        <td id="redTDResLinks">${resLinks[i][1][0]}</td>
+                        <td id="redTDResLinks">${resLinks[i][1][1]}</td>
+                        <td id="redTDResLinks">${resLinks[i][1][2]}</td>
+                        <td id="redTDResLinks">${resLinks[i][1][3]}</td>
+                        <td id="redTDResLinks"">${resLinks[i][1][6]}</td>
+                    </tr>`;
+                }
+                else {
+                    let link = "";
+                    if (!isNaN(links[resLinks[i][0]]) && isFinite(links[resLinks[i][0]]))
+                        link = parseInt(links[resLinks[i][0]]) + 1;
+                    tbody.innerHTML +=
+                    `<tr onclick="changeColorTr(this)">
+                        <td>${resLinks[i][0] + 1}</td>
+                        <td>${link}</td>
+                        <td>${resLinks[i][1][0]}</td>
+                        <td>${resLinks[i][1][1]}</td>
+                        <td>${resLinks[i][1][2]}</td>
+                        <td>${resLinks[i][1][3]}</td>
+                        <td>${resLinks[i][1][6]}</td>
+                    </tr>`;
+                }
+            }
+        }
+        catch {
+
+        }
+    }
+
+    function onchnageYear(year) {
+        let resStawki = [];
+
+        try {
+            if (year.value == 2022)
+                resStawki = stawkiPodNier2022;
+            else
+                resStawki = stawkiPodNier2023;
+
+            for (let k = 0; k < resTable.length; k++) {
+                for (let i = 0; i < 2; i++) {
+                    for (let j = 0; j < przedmiotOpodNier[i].length; j++) {
+                        if (resTable[k][1] == przedmiotOpodNier[i][j]) {
+                            resTable[k][3] = resStawki[i][j];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        catch {
+
+        }
+
+        try {
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+
+    function putResTable() {
+        try { 
+            let lines = document.getElementsByTagName("table")[0].getElementsByTagName("tr").length - 1;
+
+            for (let i = 0; i < lines; i++) {
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("select")[0].value = resTable[i][0];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("select")[1].value = resTable[i][1];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("input")[0].value = resTable[i][2];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = resTable[i][4];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = resTable[i][5];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = resTable[i][3];
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[4].getElementsByTagName("textarea")[0].innerHTML = resTable[i][6];
+            }
+        }
+        catch {
+            
+        }
+    }
+
+    function getResTable(noInputEl) {
+        try {
+            resTable = [];
+            let lines = document.getElementsByTagName("table")[0].getElementsByTagName("tr").length - 1;
+
+            for (let i = 0; i < lines; i++) {
+                let buffer = [];
+                if (document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("select")[0].value == "")
+                    buffer.push("Grunty");
+                else
+                    buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("select")[0].value);
+
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[1].getElementsByTagName("select")[1].value);
+                
+                if (noInputEl) {
+                    let powKwota, stawka;
+                    try {
+                        let htmlPowKwota = document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("input")[0].value.toString().replace(",", ".");
+                        powKwota = parseFloat(Math.round(parseFloat(htmlPowKwota) * 100) / 100);
+                    }
+                    catch {
+                        powKwota = 0;
+                    }
+
+                    try {
+                        let htmlStawka = document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[3].getElementsByTagName("input")[0].value.toString().replace(",", ".");
+                        stawka = parseFloat(htmlStawka);
+                    }
+                    catch {
+                        stawka = 0;
+                    }
+
+                    if (isNaN(powKwota) || !isFinite(powKwota))
+                        powKwota = 0;
+                    if (isNaN(stawka) || !isFinite(stawka))
+                        stawka = 0;
+
+                    buffer.push(powKwota);
+                    buffer.push(stawka);
+                }
+                else {
+                    buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("input")[0].value);
+                    buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[3].getElementsByTagName("input")[0].value);
+                }
+
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[2].getElementsByTagName("select")[0].value);
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[3].getElementsByTagName("select")[0].value);
+                buffer.push(document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].getElementsByTagName("tr")[i + 1].getElementsByTagName("td")[4].getElementsByTagName("textarea")[0].value);
+
+                if (buffer[0] == "Grunty" || buffer[0] == "Budynki lub ich części") {
+                    buffer[4] = "m2";
+                    buffer[5] = "zł/m2";
+                }
+                else {
+                    buffer[4] = "zł";
+                    buffer[5] = "%";
+                }
+
+                resTable.push(buffer);
+            }
+        }
+        catch {
+            
+        }
+    }
+
+    function onchangeElementChoose() {
+        chooseElements = [];
+        let checkBoxes = document.getElementsByName("checkBox");
+
+        for (let i = 0; i < checkBoxes.length; i++)
+            chooseElements.push(checkBoxes[i].checked);
+    }
+
+    function onChangeTyp(checkTyp) {
+        try {
+            let year = document.getElementById("yearTable").value;
+
+            if (checkTyp.value == "Grunty") {
+                checkTyp.parentElement.getElementsByTagName("select")[1].innerHTML = 
+                `<option>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</option>
+                <option>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</option>
+                <option>gruntów pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                <option>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</option>`;
+
+                if (year == 2022)
+                    checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "1.03"; 
+                else
+                    checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "1.16"; 
+
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "zł/m2"; 
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "m2";
+            }
+            else if (checkTyp.value == "Budowle") {
+                checkTyp.parentElement.getElementsByTagName("select")[1].innerHTML = 
+                `<option>mosty</option>
+                <option>lotniska</option>
+                <option>tunele</option>
+                <option>wiadukty</option>
+                <option>estakady</option>
+                <option>tablice reklamowe</option>
+                <option>stacje uzdatniania wody</option>
+                <option>oczyszczalnie ścieków</option>
+                <option>budowle sportowe</option>
+                <option>zbiorniki</option>
+                <option>sieci uzbrojenia terenu</option>
+                <option>przyłacza techniczne</option>
+                <option>parking</option>`;
+
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "2"; 
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "%"; 
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "zł";
+            }
+            else if (checkTyp.value == "Budynki lub ich części") {
+                checkTyp.parentElement.getElementsByTagName("select")[1].innerHTML = 
+                `<option>mieszkalnych</option>
+                <option>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</option>
+                <option>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</option>
+                <option>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</option>
+                <option>budynków pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>`;
+
+                if (year == 2022)
+                    checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "0.89"; 
+                else
+                    checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "1"; 
+
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "zł/m2"; 
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "m2";
+            }
+            else {
+                checkTyp.parentElement.getElementsByTagName("select")[1].innerHTML = 
+                `<option>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</option>
+                <option>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</option>
+                <option>gruntów pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                <option>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</option>
+                <option>mieszkalnych</option>
+                <option>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</option>
+                <option>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</option>
+                <option>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</option>
+                <option>budynków pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                <option>mosty</option>
+                <option>lotniska</option>
+                <option>tunele</option>
+                <option>wiadukty</option>
+                <option>estakady</option>
+                <option>tablice reklamowe</option>
+                <option>stacje uzdatniania wody</option>
+                <option>oczyszczalnie ścieków</option>
+                <option>budowle sportowe</option>
+                <option>zbiorniki</option>
+                <option>sieci uzbrojenia terenu</option>
+                <option>przyłacza techniczne</option>
+                <option>parking</option>`;
+
+                if (year == 2022)
+                    checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "1.03"; 
+                else
+                    checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "1.16";
+                
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "zł/m2"; 
+                checkTyp.parentElement.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "m2";
+            }
+        }
+        catch {
+            
+        }
+
+        try {
+            getResTable(true);
+        }
+        catch {
+
+        }
+    }
+
+    function addLine () {
+        try {
+            getResTable(true);
+        }
+        catch {
+            
+        }
+
+        try {
+            let year = document.getElementById("yearTable").value;
+
+            if (year == 2022) {
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
+                `<tr>
+                    <td style="margin-right: auto; margin-left: auto; vertical-align: middle;">
+                        <div style="display: flex; align-items: center; justify-content: center; padding-top: 6px;">
+                            <input oninput="onchangeElementChoose()" checked name="checkBox" type="checkbox" class="form-check-input" style="cursor: pointer; font-size: 32px; margin: 0px;">
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex;">
+                            <select id="uslugaTyp" onchange="onChangeTyp(this)" class="form-select mt-3" style="width: 100%; max-width: 200px; margin: 0px !important; cursor: pointer; font-size: 20px; margin-right: 12px !important;">
+                                <option value></option>
+                                <option selected>Grunty</option>
+                                <option>Budynki lub ich części</option>
+                                <option>Budowle</option>
+                            </select>
+                            <select id="usluga" onchange="onChangeUsluga(this)" class="form-select mt-3" style="width: 100%; max-width: 600px; margin: 0px !important; cursor: pointer; font-size: 20px;">
+                                <option>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</option>
+                                <option>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</option>
+                                <option>gruntów pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                                <option>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</option>
+                                <option>mieszkalnych</option>
+                                <option>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</option>
+                                <option>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</option>
+                                <option>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</option>
+                                <option>budynków pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                                <option>mosty</option>
+                                <option>lotniska</option>
+                                <option>tunele</option>
+                                <option>wiadukty</option>
+                                <option>estakady</option>
+                                <option>tablice reklamowe</option>
+                                <option>stacje uzdatniania wody</option>
+                                <option>oczyszczalnie ścieków</option>
+                                <option>budowle sportowe</option>
+                                <option>zbiorniki</option>
+                                <option>sieci uzbrojenia terenu</option>
+                                <option>przyłacza techniczne</option>
+                                <option>parking</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <input value="0" oninput="onSaveTable()" onchange="onchangeValue()" type="text" class="form-control" style="height: 100%; font-size: 24px; padding: .46rem !important; margin-bottom: 12px;">
+                        <div style="display: flex;">
+                            <select onchange="onChangeKwotaType(this)" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px; margin-right: 12px !important;">
+                                <option>m2</option>
+                                <option>zł</option>
+                            </select>
+                            <input onclick="onchangeElement(this)" type="button" value="Szczegóły" style="
+                                    cursor: pointer; color: white; border: 0px; 
+                                    background-color: cornflowerblue; 
+                                    padding: 4px 12px;
+                                    float: right;
+                                    font-size: 24px; text-align: center;">
+                        </div>
+                    </td>
+                    <td>
+                        <input oninput="onSaveTable()" onchange="onchangeValue()" type="text" class="form-control" style="height: 100%; font-size: 24px; padding: .46rem !important; margin-bottom: 12px;" value="1.03">
+                        <select oninput="onChangeStawkaType(this)" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px; margin-right: 12px !important;">
+                            <option>zł/m2</option>
+                            <option>%</option>
+                        </select>
+                    </td>
+                    <td>
+                        <textarea oninput="onSaveTextArea()" style="resize: none; height: 120px; width: 100%;"></textarea>
+                    </td>
+                    <td>
+                        <input oninput="onSaveTable()" type="button" value="Usunąć" style="
+                            cursor: pointer; color: white; border: 0px; 
+                            background-color: red; 
+                            padding: 4px 12px;
+                            font-size: 24px; text-align: center;" onclick="removeLine(this)">
+                    </td>
+                </tr>`;
+
+                putResTable();
+            }
+            else {
+                document.getElementsByTagName("table")[0].getElementsByTagName("tbody")[0].innerHTML += 
+                `<tr>
+                    <td style="margin-right: auto; margin-left: auto; vertical-align: middle;">
+                        <div style="display: flex; align-items: center; justify-content: center; padding-top: 6px;">
+                            <input oninput="onchangeElementChoose()" checked name="checkBox" type="checkbox" class="form-check-input" style="cursor: pointer; font-size: 32px; margin: 0px;">
+                        </div>
+                    </td>
+                    <td>
+                        <div style="display: flex;">
+                            <select id="uslugaTyp" onchange="onChangeTyp(this)" class="form-select mt-3" style="width: 100%; max-width: 200px; margin: 0px !important; cursor: pointer; font-size: 20px; margin-right: 12px !important;">
+                                <option value></option>
+                                <option selected>Grunty</option>
+                                <option>Budynki lub ich części</option>
+                                <option>Budowle</option>
+                            </select>
+                            <select id="usluga" onchange="onChangeUsluga(this)" class="form-select mt-3" style="width: 100%; max-width: 600px; margin: 0px !important; cursor: pointer; font-size: 20px;">
+                                <option>związanych z prowadzeniem działalności gospodarczej, bez względu na sposób zakwalifikowania w ewidencji gruntów i budynków</option>
+                                <option>pod wodami powierzchniowymi stojącymi lub wodami powierzchniowymi płynącymi jezior i zbiorników sztucznych</option>
+                                <option>gruntów pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                                <option>niezabudowanych, objętych obszarzem rewitalizacji i położonych na terenach. dla których miejscowy plan zagospodarowania przeznaczenie pod zabudowę mieszkaniową, usługową albo zabudowę o przeznaczeniu mieszanym</option>
+                                <option>mieszkalnych</option>
+                                <option>związanych z prowadzeniem działalności gospodarczej oraz od budynków mieszkalnych, lub ich części zajętych na prowadzenie działalności gospodarczej</option>
+                                <option>zajętych na prowadzenie działalności gospodarczej w zakresie obrotu kwalifikowanym materiałem siewnym</option>
+                                <option>związanych z udzieleniem świadczeń zdrowotnych w rozumieniu przepisów o działalności leczniczej, zajętych przez podmioty udzielające tych świadczeń</option>
+                                <option>budynków pozostałych, w tym zajętych na prowadzenie odpłatnej statutowej działalności pożytku publicznego przez organizacje pożytku publicznego</option>
+                                <option>mosty</option>
+                                <option>lotniska</option>
+                                <option>tunele</option>
+                                <option>wiadukty</option>
+                                <option>estakady</option>
+                                <option>tablice reklamowe</option>
+                                <option>stacje uzdatniania wody</option>
+                                <option>oczyszczalnie ścieków</option>
+                                <option>budowle sportowe</option>
+                                <option>zbiorniki</option>
+                                <option>sieci uzbrojenia terenu</option>
+                                <option>przyłacza techniczne</option>
+                                <option>parking</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td>
+                        <input  value="0" oninput="onSaveTable()" onchange="onchangeValue()" type="text" class="form-control" style="height: 100%; font-size: 24px; padding: .46rem !important; margin-bottom: 12px;">
+                        <div style="display: flex;">
+                            <select onchange="onChangeKwotaType(this)" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px; margin-right: 12px !important;">
+                                <option>m2</option>
+                                <option>zł</option>
+                            </select>
+                            <input onclick="onchangeElement(this)" type="button" value="Szczegóły" style="
+                                    cursor: pointer; color: white; border: 0px; 
+                                    background-color: cornflowerblue; 
+                                    padding: 4px 12px;
+                                    float: right;
+                                    font-size: 24px; text-align: center;">
+                        </div>
+                    </td>
+                    <td>
+                        <input oninput="onSaveTable()" onchange="onchangeValue()" type="text" class="form-control" style="height: 100%; font-size: 24px; padding: .46rem !important; margin-bottom: 12px;" value="1.16">
+                        <select onchange="onChangeStawkaType(this)" class="form-select mt-3" style="margin: 0px !important; width: 100px; cursor: pointer; font-size: 18px; margin-right: 12px !important;">
+                            <option>zł/m2</option>
+                            <option>%</option>
+                        </select>
+                    </td>
+                    <td>
+                        <textarea oninput="onSaveTextArea()" style="resize: none; height: 120px; width: 100%;"></textarea>
+                    </td>
+                    <td>
+                        <input type="button" value="Usunąć" style="
+                            cursor: pointer; color: white; border: 0px; 
+                            background-color: red; 
+                            padding: 4px 12px;
+                            font-size: 24px; text-align: center;" onclick="removeLine(this)">
+                    </td>
+                </tr>`;
+
+                putResTable();
+            }
+
+            chooseElements.push(true);
+        }
+        catch {
+
+        }
+        finally {
+            getResTable(true);
+        }
+    }
+
+    function onSaveTextArea() {
+        onchangeValue();
+    }
+
+    function onchangeValue() {
+        try {
+            getResTable(true);
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+
+    function onSaveTable() {
+        try {
+            getResTable(false);
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+
+    function onChangeKwotaType(typeKwota) {
+        try {
+            if (typeKwota.value == "m2")
+                typeKwota.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "zł/m2";
+            else
+                typeKwota.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "%";
+
+            getResTable(true);
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+
+    function onChangeStawkaType(typeStawka) {
+        try {
+            if (typeStawka.value == "%")
+                typeStawka.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "zł";
+            else
+                typeStawka.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "m2";
+
+            getResTable(true);
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+
+    function removeLine(btnRemove) {
+        try {
+            btnRemove.parentElement.parentElement.remove();
+            getResTable(true);
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+
+    function onChangeUsluga(usluga) {
+        try {
+            let value = usluga.value;
+            let year = document.getElementById("yearTable").value;
+            let budowla = true;
+
+            for (let i = 0; i < 2; i++) {
+                for (let j = 0; j < przedmiotOpodNier[i].length; j++) {
+                    if (value == przedmiotOpodNier[i][j]) {
+                        budowla = false;
+                        if (year == 2022)
+                            usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = stawkiPodNier2022[i][j];
+                        else
+                            usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = stawkiPodNier2023[i][j];
+
+                        usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "zł/m2";
+                        usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "m2";
+
+                        if (i == 0)
+                            usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[1].getElementsByTagName("select")[0].value = "Grunty";
+                        else
+                            usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[1].getElementsByTagName("select")[0].value = "Budynki lub ich części";
+
+                        break;
+                    }
+                }
+            }
+
+            if (budowla) {
+                usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value = "2";
+                usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[3].getElementsByTagName("select")[0].value = "%";
+                usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[2].getElementsByTagName("select")[0].value = "zł";
+                usluga.parentElement.parentElement.parentElement.getElementsByTagName("td")[1].getElementsByTagName("select")[0].value = "Budowle";
+            }
+        }
+        catch {
+
+        }
+
+        try {
+            getResTable(true);
+            putResTable();
+        }
+        catch {
+
+        }
+    }
+</script>
